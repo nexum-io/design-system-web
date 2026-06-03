@@ -1,0 +1,154 @@
+{
+  "type": {
+    "heading-xs": {
+      "value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "{font.size.lg}",
+        "fontWeight": "{font.weight.semibold}",
+        "lineHeight": "{font.lineHeight.tight}"
+      },
+      "type": "typography",
+      "description": "Extra small heading - 18px/600"
+    },
+    "heading-sm": {
+      "value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "{font.size.xl}",
+        "fontWeight": "{font.weight.semibold}",
+        "lineHeight": "{font.lineHeight.tight}"
+      },
+      "type": "typography",
+      "description": "Small heading - 20px/600"
+    },
+    "heading-md": {
+      "value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "{font.size.2xl}",
+        "fontWeight": "{font.weight.semibold}",
+        "lineHeight": "{font.lineHeight.tight}"
+      },
+      "type": "typography",
+      "description": "Medium heading - 24px/600"
+    },
+    "heading-lg": {
+      "value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "{font.size.3xl}",
+        "fontWeight": "{font.weight.bold}",
+        "lineHeight": "{font.lineHeight.tight}"
+      },
+      "type": "typography",
+      "description": "Large heading - 30px/700"
+    },
+    "heading-xl": {
+      "value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "{font.size.4xl}",
+        "fontWeight": "{font.weight.bold}",
+        "lineHeight": "{font.lineHeight.tight}"
+      },
+      "type": "typography",
+      "description": "Extra large heading - 36px/700"
+    },
+    "heading-2xl": {
+      "value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "{font.size.5xl}",
+        "fontWeight": "{font.weight.bold}",
+        "lineHeight": "{font.lineHeight.tight}"
+      },
+      "type": "typography",
+      "description": "2X large heading - 48px/700"
+    },
+    "body-xs": {
+      "value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "{font.size.xs}",
+        "fontWeight": "{font.weight.normal}",
+        "lineHeight": "{font.lineHeight.normal}"
+      },
+      "type": "typography",
+      "description": "Extra small body - 12px/400"
+    },
+    "body-sm": {
+      "value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "{font.size.sm}",
+        "fontWeight": "{font.weight.normal}",
+        "lineHeight": "{font.lineHeight.normal}"
+      },
+      "type": "typography",
+      "description": "Small body - 14px/400"
+    },
+    "body-md": {
+      "value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "{font.size.base}",
+        "fontWeight": "{font.weight.normal}",
+        "lineHeight": "{font.lineHeight.normal}"
+      },
+      "type": "typography",
+      "description": "Medium body - 16px/400"
+    },
+    "body-lg": {
+      "value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "{font.size.lg}",
+        "fontWeight": "{font.weight.normal}",
+        "lineHeight": "{font.lineHeight.relaxed}"
+      },
+      "type": "typography",
+      "description": "Large body - 18px/400"
+    },
+    "label-sm": {
+      "value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "{font.size.xs}",
+        "fontWeight": "{font.weight.medium}",
+        "lineHeight": "{font.lineHeight.normal}"
+      },
+      "type": "typography",
+      "description": "Small label - 12px/500"
+    },
+    "label-md": {
+      "value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "{font.size.sm}",
+        "fontWeight": "{font.weight.medium}",
+        "lineHeight": "{font.lineHeight.normal}"
+      },
+      "type": "typography",
+      "description": "Medium label - 14px/500"
+    },
+    "label-lg": {
+      "value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "{font.size.base}",
+        "fontWeight": "{font.weight.medium}",
+        "lineHeight": "{font.lineHeight.normal}"
+      },
+      "type": "typography",
+      "description": "Large label - 16px/500"
+    },
+    "code-sm": {
+      "value": {
+        "fontFamily": "{font.family.mono}",
+        "fontSize": "{font.size.xs}",
+        "fontWeight": "{font.weight.normal}",
+        "lineHeight": "{font.lineHeight.normal}"
+      },
+      "type": "typography",
+      "description": "Small code - 12px/400 mono"
+    },
+    "code-md": {
+      "value": {
+        "fontFamily": "{font.family.mono}",
+        "fontSize": "{font.size.sm}",
+        "fontWeight": "{font.weight.normal}",
+        "lineHeight": "{font.lineHeight.normal}"
+      },
+      "type": "typography",
+      "description": "Medium code - 14px/400 mono"
+    }
+  }
+}

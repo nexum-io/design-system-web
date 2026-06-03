@@ -1,93 +1,90 @@
-# design-system
+# @c-escrow/design-system
 
+Cryptoner's shared, re-skinnable UI design system — design tokens, shadcn/Radix primitives, and
+composed components for **Tailwind v4 + React 19**. This repo is the **single source of truth**;
+apps consume it as a **git submodule** mounted at `src/design-system`, so there are no copies of
+the DS in each app's repo — only a pinned pointer to a commit here.
 
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+## Layout (repo root = the package)
 
 ```
-cd existing_repo
-git remote add origin https://cryptoner.gitlab.yandexcloud.net/development/design-system.git
-git branch -M develop
-git push -uf origin develop
+index.ts                # barrel — apps import from `@/design-system`
+tokens/                 # source-of-truth JSON (core, semantic, typography) — Tokens Studio
+tokens.ts               # GENERATED typed runtime map (do not edit)
+styles/
+  tokens.css            #   GENERATED --ds-* variables (do not edit)
+  theme.css             #   shadcn→--ds-* bridge + @theme inline + @custom-variant dark
+  fonts.css             #   --font-sans + type scale
+utils/ primitives/ components/ blocks/ layouts/ examples/
+scripts/sync-design-system.mjs   # tokens JSON → tokens.css + tokens.ts
+scripts/install-skills.mjs       # install the skills into a consumer (.cursor + .claude)
+skills/                 # design-system-sync, design-system-usage (installed into consumers)
+README.md CHEATSHEET.md QUICK_START.md
 ```
 
-## Integrate with your tools
+## Develop the DS
 
-* [Set up project integrations](https://cryptoner.gitlab.yandexcloud.net/development/design-system/-/settings/integrations)
+```bash
+npm install
+npm run sync:design-system   # regenerate tokens.css + tokens.ts from tokens/*.json
+npm run check                # CI guard: fail if generated files drift from JSON
+npm run typecheck            # tsc --noEmit over the package
+```
 
-## Collaborate with your team
+Edit design in `tokens/*.json` (colors, spacing, type, radius, shadow, z-index, motion, breakpoints)
+or in the component `.tsx`, then `npm run sync:design-system` and commit. Never hand-edit
+`tokens.css` / `tokens.ts`. **All changes land via MR to `develop`** (no direct pushes).
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+## Use it in an app (git submodule)
 
-## Test and Deploy
+```bash
+# from the app repo root, on a feature branch:
+git submodule add git@cryptoner.gitlab.yandexcloud.net:development/design-system.git src/design-system
+```
 
-Use the built-in continuous integration in GitLab.
+Then wire it once:
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+1. **Alias** `@/design-system` → `src/design-system` (tsconfig `paths` + Vite `resolve.alias`) — already the convention in these repos.
+2. **Styles** — a thin `src/styles/index.css` (app-owned) pulls the DS in:
+   ```css
+   @import '../design-system/styles/fonts.css';   /* Google @import must come first */
+   @import 'tailwindcss';
+   @import 'tw-animate-css';
+   @import '../design-system/styles/tokens.css';
+   @import '../design-system/styles/theme.css';
+   @source './**/*.{ts,tsx}';      /* app code */
+   @source '../design-system';     /* the DS submodule */
+   ```
+3. **Deps** — React 19, `@radix-ui/*` (checkbox, dialog, label, select, slot, switch, tooltip),
+   `lucide-react`, `sonner`, `class-variance-authority`, `clsx`, `tailwind-merge`, Tailwind v4 +
+   `@tailwindcss/vite`, `tw-animate-css`.
+4. **Skills** — `node src/design-system/scripts/install-skills.mjs --to .` (installs `design-system-sync`
+   + `design-system-usage` into `.cursor/skills` and `.claude/skills`).
 
-***
+Import: `import { Button, Card, StatusBadge, … } from '@/design-system'`.
 
-# Editing this README
+### Update to a newer DS version
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+```bash
+git submodule update --remote src/design-system   # latest develop
+# or pin a tag:  cd src/design-system && git checkout v0.2.0 && cd -
+git add src/design-system && # commit the new pointer via MR
+```
 
-## Suggestions for a good README
+Clone an app with `git clone --recurse-submodules`, or run `git submodule update --init` after clone
+(CI must do the same).
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## Re-skin
 
-## Name
-Choose a self-explaining name for your project.
+Edit `tokens/core.json` / `tokens/semantic.json`, `npm run sync:design-system`, commit (MR). Every
+app picks it up on its next submodule update. (Per-app brand divergence is not supported by the
+submodule model — fork the repo if an app needs a different brand.)
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+## Release / versioning
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Tag releases on `develop` (e.g. `v0.1.0`); apps pin the submodule to a tag or track `develop`.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Relationship to `escrow-design-sync`
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Distinct: `escrow-design-sync` syncs the **Figma prototype** into view markup. This repo owns the
+shared **tokens, primitives, and components**.
