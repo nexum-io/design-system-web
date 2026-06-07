@@ -28,3 +28,12 @@ export type { KpiCardProps, DeltaTone } from './KpiCard';
 
 export { CopyChip } from './CopyChip';
 export type { CopyChipProps } from './CopyChip';
+
+export { FileDropzone } from './FileDropzone';
+export type { FileDropzoneProps, FileDropzoneLabels, FileRejectReason } from './FileDropzone';
+
+export { AttachmentThumb } from './AttachmentThumb';
+export type { AttachmentThumbProps, AttachmentView } from './AttachmentThumb';
+
+export { ChatBubble } from './ChatBubble';
+export type { ChatBubbleProps, ChatBubbleTone } from './ChatBubble';

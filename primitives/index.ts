@@ -3,6 +3,7 @@
  * Public API of the design system; import from '@/design-system'.
  */
 export * from './alert';
+export * from './avatar';
 export * from './badge';
 export * from './button';
 export * from './checkbox';
@@ -12,5 +13,6 @@ export * from './label';
 export * from './select';
 export * from './sonner';
 export * from './switch';
+export * from './tabs';
 export * from './textarea';
 export * from './tooltip';
