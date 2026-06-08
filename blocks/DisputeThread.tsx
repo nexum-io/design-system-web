@@ -14,6 +14,7 @@ import { Info, Paperclip, Send } from "lucide-react";
 import { cx } from "../utils/cx";
 import { Button } from "../primitives/button";
 import { Textarea } from "../primitives/textarea";
+import { Alert, AlertDescription } from "../primitives/alert";
 import { ChatBubble, type ChatBubbleTone } from "../components/ChatBubble";
 import { FileDropzone, type FileDropzoneLabels } from "../components/FileDropzone";
 import type { AttachmentView } from "../components/AttachmentThumb";
@@ -50,6 +51,7 @@ export interface DisputeThreadProps {
   labels: DisputeThreadLabels;
   sending?: boolean;
   disabled?: boolean;
+  error?: string | null;
   onSend: (input: ThreadSendInput) => void | Promise<void>;
   accept?: string;
   maxFiles?: number;
@@ -62,6 +64,7 @@ export function DisputeThread({
   labels,
   sending = false,
   disabled = false,
+  error,
   onSend,
   accept = "image/*,.pdf",
   maxFiles = 6,
@@ -91,6 +94,11 @@ export function DisputeThread({
 
   return (
     <div className={cx("flex flex-col gap-3", className)}>
+      {error && (
+        <Alert variant="destructive">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
       {labels.note && (
         <p className="flex items-start gap-1.5 text-xs text-muted-foreground">
           <Info className="mt-0.5 size-3.5 shrink-0" />
