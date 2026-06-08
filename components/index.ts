@@ -37,3 +37,9 @@ export type { AttachmentThumbProps, AttachmentView } from './AttachmentThumb';
 
 export { ChatBubble } from './ChatBubble';
 export type { ChatBubbleProps, ChatBubbleTone } from './ChatBubble';
+
+export { Spinner } from './Spinner';
+export type { SpinnerProps } from './Spinner';
+
+export { FormField, IconInput } from './FormField';
+export type { FormFieldProps, IconInputProps } from './FormField';
