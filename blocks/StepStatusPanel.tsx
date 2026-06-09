@@ -54,9 +54,9 @@ export function StepStatusPanel({
       </IconBox>
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium text-gray-900">{label}</p>
-        <p className="mt-0.5 text-xs leading-relaxed text-gray-500">{description}</p>
-        {hint ? <p className="mt-1.5 text-xs leading-relaxed text-brand">{hint}</p> : null}
-        {error ? <p className="mt-1.5 text-xs text-red-600">{error}</p> : null}
+        <p className="mt-0.5 break-words text-xs leading-relaxed text-gray-500">{description}</p>
+        {hint ? <p className="mt-1.5 break-words text-xs leading-relaxed text-brand">{hint}</p> : null}
+        {error ? <p className="mt-1.5 break-words text-xs text-red-600">{error}</p> : null}
         {actions ? <div className="mt-2">{actions}</div> : null}
       </div>
     </div>

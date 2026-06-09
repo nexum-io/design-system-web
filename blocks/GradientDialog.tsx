@@ -43,7 +43,7 @@ export function GradientDialog({
         hideCloseButton
         closeLabel={closeLabel}
         className={cx(
-          'flex max-w-2xl w-full flex-col gap-0 rounded-2xl border-0 p-0 sm:max-w-2xl max-sm:rounded-b-none',
+          'flex max-h-[90dvh] min-w-0 max-w-2xl w-full flex-col gap-0 overflow-hidden rounded-2xl border-0 p-0 sm:max-w-2xl max-sm:rounded-b-none',
           className,
         )}
         aria-describedby={subtitle ? undefined : undefined}
@@ -76,10 +76,9 @@ export function GradientDialog({
           {headerExtra}
         </div>
 
-        {beforeContent ? <div className="shrink-0">{beforeContent}</div> : null}
-
-        <div className={cx('min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-6 sm:py-8', contentClassName)}>
-          {children}
+        <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain">
+          {beforeContent ? <div className="shrink-0">{beforeContent}</div> : null}
+          <div className={cx('px-4 py-4 sm:px-6 sm:py-8', contentClassName)}>{children}</div>
         </div>
 
         {footer ? (
