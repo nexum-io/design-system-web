@@ -43,7 +43,7 @@ export function GradientDialog({
         hideCloseButton
         closeLabel={closeLabel}
         className={cx(
-          'max-w-2xl w-full gap-0 overflow-hidden rounded-2xl border-0 p-0 sm:max-w-2xl',
+          'flex max-w-2xl w-full flex-col gap-0 rounded-2xl border-0 p-0 sm:max-w-2xl max-sm:rounded-b-none',
           className,
         )}
         aria-describedby={subtitle ? undefined : undefined}
@@ -51,37 +51,41 @@ export function GradientDialog({
         <DialogTitle className="sr-only">{title}</DialogTitle>
         {subtitle ? <DialogDescription className="sr-only">{subtitle}</DialogDescription> : null}
 
-        <div className="bg-gradient-to-r from-brand to-[var(--ds-color-purple-500)] px-6 py-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+        <div className="shrink-0 bg-gradient-to-r from-brand to-[var(--ds-color-purple-500)] px-4 py-4 sm:px-6 sm:py-5">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex min-w-0 items-center gap-3">
               {icon ? (
-                <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
                   {icon}
                 </div>
               ) : null}
-              <div>
-                <p className="text-xl font-semibold text-white">{title}</p>
+              <div className="min-w-0">
+                <p className="text-base font-semibold text-white sm:text-xl">{title}</p>
                 {subtitle ? <p className="text-sm text-white/80">{subtitle}</p> : null}
               </div>
             </div>
             <button
               type="button"
               onClick={() => onOpenChange(false)}
-              className="text-white/80 hover:text-white transition-colors p-1 focus-visible:ring-2 focus-visible:ring-white/50 rounded-lg"
+              className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-lg p-2 text-white/80 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/50"
               aria-label={closeLabel}
             >
-              <X className="w-5 h-5" />
+              <X className="h-5 w-5" />
             </button>
           </div>
           {headerExtra}
         </div>
 
-        {beforeContent}
+        {beforeContent ? <div className="shrink-0">{beforeContent}</div> : null}
 
-        <div className={cx('px-6 py-8', contentClassName)}>{children}</div>
+        <div className={cx('min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-6 sm:py-8', contentClassName)}>
+          {children}
+        </div>
 
         {footer ? (
-          <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">{footer}</div>
+          <div className="shrink-0 border-t border-gray-100 bg-gray-50 px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))] sm:px-6">
+            {footer}
+          </div>
         ) : null}
       </DialogContent>
     </Dialog>

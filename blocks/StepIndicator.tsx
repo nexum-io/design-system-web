@@ -29,7 +29,11 @@ const statusClasses: Record<StepIndicatorStatus, string> = {
 
 export function StepIndicator({ steps, ariaLabel, className, compact = false }: StepIndicatorProps) {
   return (
-    <div className={cx('flex items-center', className)} role="list" aria-label={ariaLabel}>
+    <div
+      className={cx('flex min-w-0 items-center overflow-x-auto', className)}
+      role="list"
+      aria-label={ariaLabel}
+    >
       {steps.map((step, index) => {
         const StepIcon = step.icon;
         const isCompleted = step.status === 'completed';
@@ -54,7 +58,7 @@ export function StepIndicator({ steps, ariaLabel, className, compact = false }: 
                   <StepIcon className={compact ? 'w-4 h-4' : 'w-5 h-5'} />
                 )}
               </div>
-              <div className={cx('text-center', compact ? 'mt-1.5' : 'mt-2 hidden sm:block')}>
+              <div className={cx('text-center', compact ? 'mt-1.5 hidden sm:block' : 'mt-2 hidden sm:block')}>
                 <p
                   className={cx(
                     'font-medium whitespace-nowrap',

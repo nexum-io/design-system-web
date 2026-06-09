@@ -100,7 +100,7 @@ export function OpenDisputeModal({
 
   return (
     <Dialog open={open} onOpenChange={(next) => !submitting && onOpenChange(next)}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+      <DialogContent className="flex max-h-[90dvh] flex-col overflow-y-auto sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>{labels.title}</DialogTitle>
           {labels.description && <DialogDescription>{labels.description}</DialogDescription>}

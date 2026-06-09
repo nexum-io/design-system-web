@@ -48,12 +48,12 @@ export function AttachmentThumb({ attachment, className }: AttachmentThumbProps)
           />
         </button>
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogContent className="max-w-3xl">
+          <DialogContent variant="centered" className="max-h-[90dvh] overflow-y-auto p-4 sm:max-w-3xl sm:p-6">
             <DialogTitle className="sr-only">{attachment.name}</DialogTitle>
             <img
               src={attachment.url}
               alt={attachment.name}
-              className="max-h-[75vh] w-full rounded-lg object-contain"
+              className="max-h-[75dvh] w-full rounded-lg object-contain"
             />
             <a
               href={attachment.url}
