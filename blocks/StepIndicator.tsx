@@ -15,6 +15,8 @@ export interface StepIndicatorProps {
   steps: StepIndicatorItem[];
   ariaLabel?: string;
   className?: string;
+  /** Smaller circles and tighter spacing for dense layouts (e.g. modals). */
+  compact?: boolean;
 }
 
 const statusClasses: Record<StepIndicatorStatus, string> = {
@@ -25,7 +27,7 @@ const statusClasses: Record<StepIndicatorStatus, string> = {
   upcoming: 'bg-gray-100 text-gray-400',
 };
 
-export function StepIndicator({ steps, ariaLabel, className }: StepIndicatorProps) {
+export function StepIndicator({ steps, ariaLabel, className, compact = false }: StepIndicatorProps) {
   return (
     <div className={cx('flex items-center', className)} role="list" aria-label={ariaLabel}>
       {steps.map((step, index) => {
@@ -37,23 +39,26 @@ export function StepIndicator({ steps, ariaLabel, className }: StepIndicatorProp
             <div className="flex flex-col items-center" role="listitem">
               <div
                 className={cx(
-                  'w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300',
+                  'rounded-full flex items-center justify-center transition-all duration-300',
+                  compact ? 'w-9 h-9' : 'w-12 h-12',
                   statusClasses[step.status],
+                  compact && (step.status === 'active' || step.status === 'error') && 'ring-2',
                 )}
                 aria-current={step.status === 'active' ? 'step' : undefined}
               >
                 {isCompleted ? (
-                  <Check className="w-6 h-6" />
+                  <Check className={compact ? 'w-4 h-4' : 'w-6 h-6'} />
                 ) : isError ? (
-                  <AlertCircle className="w-6 h-6" />
+                  <AlertCircle className={compact ? 'w-4 h-4' : 'w-6 h-6'} />
                 ) : (
-                  <StepIcon className="w-5 h-5" />
+                  <StepIcon className={compact ? 'w-4 h-4' : 'w-5 h-5'} />
                 )}
               </div>
-              <div className="mt-2 text-center hidden sm:block">
+              <div className={cx('text-center', compact ? 'mt-1.5' : 'mt-2 hidden sm:block')}>
                 <p
                   className={cx(
-                    'text-xs font-medium whitespace-nowrap',
+                    'font-medium whitespace-nowrap',
+                    compact ? 'text-[11px]' : 'text-xs',
                     step.status === 'active' || step.status === 'completed'
                       ? 'text-foreground'
                       : 'text-muted-foreground',
@@ -66,7 +71,8 @@ export function StepIndicator({ steps, ariaLabel, className }: StepIndicatorProp
             {index < steps.length - 1 && (
               <div
                 className={cx(
-                  'h-0.5 flex-1 mx-3 transition-all duration-300',
+                  'h-0.5 flex-1 transition-all duration-300',
+                  compact ? 'mx-2' : 'mx-3',
                   isCompleted ? 'bg-brand' : 'bg-gray-200',
                 )}
                 aria-hidden="true"
