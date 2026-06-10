@@ -167,7 +167,7 @@ export function FileDropzone({
         }}
         className={cn(
           "flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed px-4 py-6 text-center outline-none transition-colors",
-          "focus-visible:ring-ring focus-visible:ring-[2px]",
+          "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           disabled
             ? "cursor-not-allowed border-border-muted opacity-60"
             : "cursor-pointer hover:bg-bg-subtle",
@@ -228,9 +228,9 @@ export function FileDropzone({
                     type="button"
                     aria-label={labels?.remove ?? "Remove file"}
                     onClick={() => removeAt(index)}
-                    className="absolute right-1 top-1 flex size-5 items-center justify-center rounded-full bg-bg-muted text-muted-foreground opacity-0 outline-none transition-opacity hover:bg-danger-subtle hover:text-danger-fg focus-visible:opacity-100 focus-visible:ring-ring focus-visible:ring-[2px] group-hover:opacity-100"
+                    className="absolute right-1 top-1 flex size-7 cursor-pointer items-center justify-center rounded-full bg-bg-muted text-muted-foreground opacity-0 outline-none transition-opacity hover:bg-danger-subtle hover:text-danger-fg focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background group-hover:opacity-100"
                   >
-                    <X className="size-3" />
+                    <X className="size-4" />
                   </button>
                 )}
               </li>

@@ -37,13 +37,14 @@ export function AttachmentThumb({ attachment, className }: AttachmentThumbProps)
           onClick={() => setOpen(true)}
           aria-label={attachment.name}
           className={cn(
-            "group relative size-20 shrink-0 overflow-hidden rounded-lg border border-border-muted bg-bg-muted outline-none focus-visible:ring-ring focus-visible:ring-[2px]",
+            "group relative size-20 shrink-0 overflow-hidden rounded-lg border border-border-muted bg-bg-muted outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
             className,
           )}
         >
           <img
             src={attachment.url}
             alt={attachment.name}
+            loading="lazy"
             className="size-full object-cover transition-transform group-hover:scale-105"
           />
         </button>
@@ -60,10 +61,10 @@ export function AttachmentThumb({ attachment, className }: AttachmentThumbProps)
               download={attachment.name}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 self-start text-sm text-primary outline-none hover:underline focus-visible:ring-ring focus-visible:ring-[2px]"
+              className="inline-flex items-center gap-2 self-start text-sm text-primary outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <Download className="size-4" />
-              <span className="max-w-[16rem] truncate">{attachment.name}</span>
+              <span className="max-w-[16rem] truncate" title={attachment.name}>{attachment.name}</span>
             </a>
           </DialogContent>
         </Dialog>
@@ -78,12 +79,12 @@ export function AttachmentThumb({ attachment, className }: AttachmentThumbProps)
       target="_blank"
       rel="noreferrer"
       className={cn(
-        "inline-flex max-w-full items-center gap-2 rounded-lg border border-border-muted bg-card px-3 py-2 text-xs font-medium text-foreground outline-none hover:bg-bg-subtle focus-visible:ring-ring focus-visible:ring-[2px]",
+        "inline-flex max-w-full items-center gap-2 rounded-lg border border-border-muted bg-card px-3 py-2 text-xs font-medium text-foreground outline-none hover:bg-bg-subtle focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className,
       )}
     >
       <Paperclip className="size-4 shrink-0 text-muted-foreground" />
-      <span className="max-w-[12rem] truncate">{attachment.name}</span>
+      <span className="max-w-[12rem] truncate" title={attachment.name}>{attachment.name}</span>
     </a>
   );
 }

@@ -9,10 +9,12 @@ const sizeClasses = {
 export interface SpinnerProps {
   size?: keyof typeof sizeClasses;
   className?: string;
+  /** Screen-reader announcement (e.g. "Загрузка…"). When set, wraps the spinner in role="status". */
+  label?: string;
 }
 
-export function Spinner({ size = 'md', className }: SpinnerProps) {
-  return (
+export function Spinner({ size = 'md', className, label }: SpinnerProps) {
+  const circle = (
     <div
       className={cx(
         'border-brand border-t-transparent rounded-full animate-spin',
@@ -21,5 +23,14 @@ export function Spinner({ size = 'md', className }: SpinnerProps) {
       )}
       aria-hidden="true"
     />
+  );
+
+  if (!label) return circle;
+
+  return (
+    <span role="status" aria-live="polite" className="inline-flex">
+      {circle}
+      <span className="sr-only">{label}</span>
+    </span>
   );
 }

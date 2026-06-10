@@ -40,6 +40,7 @@ export function CopyChip({
       )}
     >
       <code
+        title={value}
         className={cn(
           'font-mono',
           fullWidth && 'min-w-0 flex-1',
@@ -52,12 +53,15 @@ export function CopyChip({
         type="button"
         variant="ghost"
         size="icon"
-        className="size-6 shrink-0"
+        className="size-8 shrink-0"
         onClick={() => void copy(value)}
         aria-label={copied ? copiedLabel : copyLabel}
       >
         {copied ? <Check className="text-success" /> : <Copy />}
       </Button>
+      <span role="status" aria-live="polite" className="sr-only">
+        {copied ? copiedLabel : ''}
+      </span>
     </span>
   );
 }
