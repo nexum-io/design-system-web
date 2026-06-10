@@ -1,11 +1,66 @@
 /**
  * DS CopyChip — inline code/hash/address chip with a copy button.
  */
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Check, Copy } from 'lucide-react';
 
 import { Button } from '../primitives/button';
 import { cn } from '../utils/cx';
-import { useCopyFeedback } from '@/hooks/useCopyFeedback';
+
+const FEEDBACK_MS = 2000;
+
+/* Self-contained clipboard helper: Clipboard API with a textarea fallback for
+   non-secure contexts, so the DS does not depend on app-level utils. */
+async function copyText(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    try {
+      const node = document.createElement('textarea');
+      node.value = text;
+      node.setAttribute('readonly', '');
+      node.style.position = 'fixed';
+      node.style.opacity = '0';
+      document.body.appendChild(node);
+      node.select();
+      const ok = document.execCommand('copy');
+      node.remove();
+      return ok;
+    } catch {
+      return false;
+    }
+  }
+}
+
+function useCopyFeedback(resetMs = FEEDBACK_MS) {
+  const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(
+    () => () => {
+      if (timeoutRef.current !== null) clearTimeout(timeoutRef.current);
+    },
+    [],
+  );
+
+  const copy = useCallback(
+    async (text: string) => {
+      const ok = await copyText(text);
+      if (!ok) return false;
+      setCopied(true);
+      if (timeoutRef.current !== null) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
+        setCopied(false);
+        timeoutRef.current = null;
+      }, resetMs);
+      return true;
+    },
+    [resetMs],
+  );
+
+  return { copied, copy };
+}
 
 export interface CopyChipProps {
   value: string;
