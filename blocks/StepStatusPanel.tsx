@@ -40,10 +40,10 @@ export function StepStatusPanel({
       className={cx(
         'flex items-start gap-3 rounded-xl border px-4 py-3',
         status === 'error'
-          ? 'border-red-100 bg-red-50/60'
+          ? 'border-danger/25 bg-danger-subtle/60'
           : status === 'completed'
-            ? 'border-green-100 bg-green-50/50'
-            : 'border-gray-100 bg-gray-50/80',
+            ? 'border-success/25 bg-success-subtle/50'
+            : 'border-border-muted bg-bg-subtle/80',
         className,
       )}
       role="status"
@@ -53,10 +53,10 @@ export function StepStatusPanel({
         {loading ? <Spinner size="sm" /> : <Icon className="w-4 h-4" />}
       </IconBox>
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-medium text-gray-900">{label}</p>
-        <p className="mt-0.5 break-words text-xs leading-relaxed text-gray-500">{description}</p>
+        <p className="text-sm font-medium text-foreground">{label}</p>
+        <p className="mt-0.5 break-words text-xs leading-relaxed text-muted-foreground">{description}</p>
         {hint ? <p className="mt-1.5 break-words text-xs leading-relaxed text-brand">{hint}</p> : null}
-        {error ? <p className="mt-1.5 break-words text-xs text-red-600">{error}</p> : null}
+        {error ? <p className="mt-1.5 break-words text-xs text-danger-fg">{error}</p> : null}
         {actions ? <div className="mt-2">{actions}</div> : null}
       </div>
     </div>

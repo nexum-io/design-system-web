@@ -17,6 +17,8 @@ export interface EmptyStateProps {
   /** Alias for `subtitle`. */
   description?: string;
   action?: React.ReactNode;
+  /** Heading level for the title — match the surrounding document outline. */
+  as?: 'h2' | 'h3' | 'h4';
   className?: string;
 }
 
@@ -27,6 +29,7 @@ export function EmptyState({
   subtitle,
   description,
   action,
+  as: Heading = 'h3',
   className,
 }: EmptyStateProps) {
   const text = subtitle ?? description;
@@ -44,7 +47,7 @@ export function EmptyState({
             {icon}
           </div>
         ) : null)}
-      <h3 className="text-base font-semibold text-foreground mb-2">{title}</h3>
+      <Heading className="text-base font-semibold text-foreground mb-2">{title}</Heading>
       {text && <p className="text-sm text-fg-subtle mb-6">{text}</p>}
       {action}
     </div>

@@ -16,8 +16,8 @@ export function PageLayout({ children, bg = 'subtle', className }: PageLayoutPro
   return (
     <div
       className={cx(
-        'min-h-screen',
-        bg === 'subtle' ? 'bg-[var(--ds-bg-subtle)]' : 'bg-[var(--ds-bg)]',
+        'min-h-dvh',
+        bg === 'subtle' ? 'bg-bg-subtle' : 'bg-background',
         className,
       )}
     >

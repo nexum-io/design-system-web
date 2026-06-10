@@ -13,6 +13,8 @@ export interface FeatureCardProps {
   title: string;
   description: string;
   iconVariant?: IconBoxProps['variant'];
+  /** Heading level for the title — match the surrounding document outline. */
+  as?: 'h2' | 'h3' | 'h4';
   className?: string;
 }
 
@@ -21,6 +23,7 @@ export function FeatureCard({
   title,
   description,
   iconVariant = 'brand',
+  as: Heading = 'h3',
   className,
 }: FeatureCardProps) {
   return (
@@ -28,7 +31,7 @@ export function FeatureCard({
       <IconBox variant={iconVariant} size="xl" className="mx-auto mb-5">
         {icon}
       </IconBox>
-      <h3 className="text-foreground mb-2">{title}</h3>
+      <Heading className="text-foreground mb-2">{title}</Heading>
       <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
     </div>
   );

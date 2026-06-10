@@ -40,9 +40,9 @@
           "description": "Muted text for secondary content"
         },
         "subtle": {
-          "value": "{color.gray.400}",
+          "value": "{color.gray.500}",
           "type": "color",
-          "description": "Subtle text for tertiary content"
+          "description": "Subtle text for tertiary content (4.83:1 on white — AA; decorative/captions, not body text)"
         },
         "onPrimary": {
           "value": "{color.white}",
@@ -202,9 +202,9 @@
           "description": "Muted text in dark mode"
         },
         "subtle": {
-          "value": "{color.gray.600}",
+          "value": "{color.gray.500}",
           "type": "color",
-          "description": "Subtle text in dark mode"
+          "description": "Subtle text in dark mode (4.16:1 on gray-950; decorative/captions, not body text)"
         },
         "onPrimary": {
           "value": "{color.white}",

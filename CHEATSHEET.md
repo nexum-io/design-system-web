@@ -288,6 +288,24 @@ Arbitrary values still work when no named utility exists:
 4. **Use TypeScript imports** for autocomplete
 5. **Keep components token-based** (no hardcoded values)
 
+## 🚦 Accessibility Rules (audit 2026-06)
+
+- **Contrast pairs.** On `--ds-warning`/`--ds-success` solid fills use the matching `*-fg` token,
+  NEVER white (white-on-warning is 2.15:1). White text is only safe on `--ds-primary` solids,
+  `--ds-danger` (light mode) and the brand gradient.
+- **`--ds-fg-subtle` is for captions/decorative text only** (4.83:1 light / 4.16:1 dark) —
+  body copy uses `--ds-fg` or `--ds-fg-muted`.
+- **Focus ring pattern (one for everything):**
+  `focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background`
+  (2px solid brand + 2px offset — WCAG 2.4.13).
+- **Brand gradient comes from tokens:** `from-(--brand-gradient-from) to-(--brand-gradient-to)`
+  (+ `--brand-gradient-hover-*` for hover). Never hardcode `purple-*` stops.
+- **Gradients live on marketing surfaces only** (Hero, GradientDialog header, landing CTA).
+  Operational UI (deals, disputes, amounts) stays flat: `bg-card` + `StatusBadge`.
+- **Overlay z-index uses the scale:** `z-(--ds-z-overlay|modal|popover|toast|tooltip)` — no `z-50`.
+- **Dark mode = semantic tokens.** Raw palette classes (`gray-200`, `red-50`…) don't flip with
+  `.dark`; if you must use one, pair it with an explicit `dark:` variant.
+
 ## 🔗 Quick Links
 
 - Full docs: [README.md](./README.md)

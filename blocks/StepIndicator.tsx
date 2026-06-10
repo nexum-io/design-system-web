@@ -22,9 +22,9 @@ export interface StepIndicatorProps {
 const statusClasses: Record<StepIndicatorStatus, string> = {
   completed: 'bg-brand text-white',
   active: 'bg-brand text-white ring-4 ring-brand/20',
-  error: 'bg-red-500 text-white ring-4 ring-red-500/20',
-  inactive: 'bg-gray-100 text-gray-400',
-  upcoming: 'bg-gray-100 text-gray-400',
+  error: 'bg-danger text-white ring-4 ring-danger/20',
+  inactive: 'bg-bg-muted text-fg-subtle',
+  upcoming: 'bg-bg-muted text-fg-subtle',
 };
 
 export function StepIndicator({ steps, ariaLabel, className, compact = false }: StepIndicatorProps) {
@@ -77,7 +77,7 @@ export function StepIndicator({ steps, ariaLabel, className, compact = false }: 
                 className={cx(
                   'h-0.5 flex-1 transition-all duration-300',
                   compact ? 'mx-2' : 'mx-3',
-                  isCompleted ? 'bg-brand' : 'bg-gray-200',
+                  isCompleted ? 'bg-brand' : 'bg-bg-muted',
                 )}
                 aria-hidden="true"
               />

@@ -51,7 +51,7 @@ export function GradientDialog({
         <DialogTitle className="sr-only">{title}</DialogTitle>
         {subtitle ? <DialogDescription className="sr-only">{subtitle}</DialogDescription> : null}
 
-        <div className="shrink-0 bg-gradient-to-r from-brand to-[var(--ds-color-purple-500)] px-4 py-4 sm:px-6 sm:py-5">
+        <div className="shrink-0 bg-gradient-to-r from-(--brand-gradient-from) to-(--brand-gradient-to) px-4 py-4 sm:px-6 sm:py-5">
           <div className="flex items-center justify-between gap-2">
             <div className="flex min-w-0 items-center gap-3">
               {icon ? (
@@ -67,7 +67,7 @@ export function GradientDialog({
             <button
               type="button"
               onClick={() => onOpenChange(false)}
-              className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-lg p-2 text-white/80 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/50"
+              className="flex min-h-11 min-w-11 shrink-0 cursor-pointer items-center justify-center rounded-lg p-2 text-white/80 transition-colors outline-none hover:text-white focus-visible:ring-2 focus-visible:ring-white"
               aria-label={closeLabel}
             >
               <X className="h-5 w-5" />
@@ -82,7 +82,7 @@ export function GradientDialog({
         </div>
 
         {footer ? (
-          <div className="shrink-0 border-t border-gray-100 bg-gray-50 px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))] sm:px-6">
+          <div className="shrink-0 border-t border-border-muted bg-bg-subtle px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))] sm:px-6">
             {footer}
           </div>
         ) : null}

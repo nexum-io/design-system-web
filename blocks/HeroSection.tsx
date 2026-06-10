@@ -19,7 +19,7 @@ export function HeroSection({ icon, title, subtitle, actions, className }: HeroS
   return (
     <section
       className={cx(
-        'bg-gradient-to-b from-brand to-[var(--ds-color-purple-500)] text-white py-12 lg:py-20',
+        'bg-gradient-to-b from-(--brand-gradient-from) to-(--brand-gradient-to) text-white py-12 lg:py-20',
         className,
       )}
     >
