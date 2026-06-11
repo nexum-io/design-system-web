@@ -2,7 +2,8 @@ import type { ReactNode } from 'react';
 import { cx } from '../utils/cx';
 
 export interface DetailRowProps {
-  label: string;
+  /** Подпись строки; ReactNode — для бейджей рядом с текстом («вы» и т.п.). */
+  label: ReactNode;
   children: ReactNode;
   last?: boolean;
   className?: string;

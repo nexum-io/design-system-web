@@ -68,6 +68,8 @@ export interface CopyChipProps {
   truncate?: boolean;
   /** Stretch to container width and pin the copy button to the right. */
   fullWidth?: boolean;
+  /** Visual density: `sm` for meta rows and dense tables. Default: `md`. */
+  size?: 'md' | 'sm';
   copyLabel?: string;
   copiedLabel?: string;
   className?: string;
@@ -77,19 +79,26 @@ export function CopyChip({
   value,
   truncate = true,
   fullWidth = false,
+  size = 'md',
   copyLabel = 'Copy',
   copiedLabel = 'Copied',
   className,
 }: CopyChipProps) {
   const { copied, copy } = useCopyFeedback();
 
+  const compact = size === 'sm';
   const display =
-    truncate && value.length > 18 ? `${value.slice(0, 10)}…${value.slice(-8)}` : value;
+    truncate && value.length > 18
+      ? compact
+        ? `${value.slice(0, 6)}…${value.slice(-4)}`
+        : `${value.slice(0, 10)}…${value.slice(-8)}`
+      : value;
 
   return (
     <span
       className={cn(
-        'bg-bg-muted items-center gap-2 rounded-md px-2 py-1 text-xs',
+        'bg-bg-muted items-center rounded-md',
+        compact ? 'gap-1.5 px-1.5 py-0.5 text-2xs' : 'gap-2 px-2 py-1 text-xs',
         fullWidth ? 'flex w-full' : 'inline-flex',
         className,
       )}
@@ -107,8 +116,8 @@ export function CopyChip({
       <Button
         type="button"
         variant="ghost"
-        size="icon"
-        className="size-8 shrink-0"
+        size={compact ? 'icon-xs' : 'icon'}
+        className={cn('shrink-0', !compact && 'size-8')}
         onClick={() => void copy(value)}
         aria-label={copied ? copiedLabel : copyLabel}
       >
