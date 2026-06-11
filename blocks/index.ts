@@ -4,6 +4,7 @@ export { HeroSection, type HeroSectionProps } from './HeroSection';
 export { EmptyState, type EmptyStateProps } from './EmptyState';
 export { SectionBlock, type SectionBlockProps } from './SectionBlock';
 export { ErrorStateCard, type ErrorStateCardProps } from './ErrorStateCard';
+export { FullScreenError, type FullScreenErrorProps } from './FullScreenError';
 export { DetailRow, type DetailRowProps } from './DetailRow';
 export { SectionHeader, type SectionHeaderProps } from './SectionHeader';
 export { StepIndicator, type StepIndicatorProps, type StepIndicatorItem, type StepIndicatorStatus } from './StepIndicator';
