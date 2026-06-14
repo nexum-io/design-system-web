@@ -15,6 +15,8 @@ export interface GradientDialogProps {
   subtitle?: string;
   icon?: ReactNode;
   closeLabel?: string;
+  /** Визуально блокирует крестик (критическая фаза): молчаливый игнор закрытия — анти-паттерн. */
+  closeDisabled?: boolean;
   children: ReactNode;
   footer?: ReactNode;
   headerExtra?: ReactNode;
@@ -30,6 +32,7 @@ export function GradientDialog({
   subtitle,
   icon,
   closeLabel = 'Close',
+  closeDisabled = false,
   children,
   footer,
   headerExtra,
@@ -66,9 +69,16 @@ export function GradientDialog({
             </div>
             <button
               type="button"
-              onClick={() => onOpenChange(false)}
-              className="flex min-h-11 min-w-11 shrink-0 cursor-pointer items-center justify-center rounded-lg p-2 text-white/80 transition-colors outline-none hover:text-white focus-visible:ring-2 focus-visible:ring-white"
+              onClick={() => { if (!closeDisabled) onOpenChange(false); }}
+              disabled={closeDisabled}
+              className={cx(
+                'flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-lg p-2 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-white',
+                closeDisabled
+                  ? 'cursor-not-allowed text-white/30'
+                  : 'cursor-pointer text-white/80 hover:text-white',
+              )}
               aria-label={closeLabel}
+              aria-disabled={closeDisabled || undefined}
             >
               <X className="h-5 w-5" />
             </button>
