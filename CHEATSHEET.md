@@ -5,6 +5,10 @@ Quick reference for the most commonly used design tokens.
 > **Prefer components.** Import `Button`, `Card`, `Input`, `StatusBadge`, `IconBox`, `KpiCard`,
 > `CopyChip`, `PageHeader`, `EmptyState`, etc. from `@/design-system`. The raw token snippets below
 > are for building something custom. Browse all of them live at the `/design-system` route.
+>
+> **Showcase-only:** `HeroSection`, `FeatureCard`, `KpiCard` appear in `DesignSystemShowcase` / audit pages — not used in production landing (`LandingHero` uses primitives directly).
+>
+> **Deprecated:** `Badge` primitive — migrate to `StatusBadge`. See [escrow/docs/DESIGN_SYSTEM.md](../../../docs/DESIGN_SYSTEM.md).
 
 ## 🎨 Colors
 
