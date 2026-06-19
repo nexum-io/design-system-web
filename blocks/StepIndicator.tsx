@@ -20,9 +20,9 @@ export interface StepIndicatorProps {
 }
 
 const statusClasses: Record<StepIndicatorStatus, string> = {
-  completed: 'bg-brand text-white',
-  active: 'bg-brand text-white ring-4 ring-brand/20',
-  error: 'bg-danger text-white ring-4 ring-danger/20',
+  completed: 'bg-brand text-primary-foreground',
+  active: 'bg-brand text-primary-foreground ring-4 ring-brand/20',
+  error: 'bg-danger text-destructive-foreground ring-4 ring-danger/20',
   inactive: 'bg-bg-muted text-fg-subtle',
   upcoming: 'bg-bg-muted text-fg-subtle',
 };
