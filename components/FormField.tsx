@@ -32,14 +32,14 @@ export function FormField({ label, htmlFor, error, required, children, className
       <Label htmlFor={htmlFor} className="text-sm text-muted-foreground">
         {label}
         {required ? (
-          <span className="text-danger" aria-hidden>
-            *
+          <span className="text-danger" aria-hidden="true">
+            {' *'}
           </span>
         ) : null}
       </Label>
       {child}
       {error ? (
-        <p id={errorId} className="text-xs text-destructive">
+        <p id={errorId} role="alert" className="text-xs text-destructive">
           {error}
         </p>
       ) : null}
