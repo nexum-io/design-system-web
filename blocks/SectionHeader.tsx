@@ -15,9 +15,11 @@ export function SectionHeader({ icon, title, subtitle, className }: SectionHeade
       <IconBox variant="brand" size="sm">
         {icon}
       </IconBox>
-      <div>
-        <h2 className="text-lg font-semibold text-foreground">{title}</h2>
-        {subtitle ? <p className="text-xs text-muted-foreground">{subtitle}</p> : null}
+      <div className="min-w-0">
+        <h2 className="ds-text-heading-xs text-foreground">{title}</h2>
+        {subtitle ? (
+          <p className="ds-text-body-sm mt-1 text-muted-foreground">{subtitle}</p>
+        ) : null}
       </div>
     </div>
   );
