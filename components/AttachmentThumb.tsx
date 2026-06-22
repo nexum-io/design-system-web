@@ -29,6 +29,20 @@ export interface AttachmentThumbProps {
 export function AttachmentThumb({ attachment, className }: AttachmentThumbProps) {
   const [open, setOpen] = React.useState(false);
 
+  if (!attachment.url) {
+    return (
+      <span
+        className={cn(
+          'inline-flex max-w-full items-center gap-2 rounded-lg border border-dashed border-border-muted px-3 py-2 text-xs text-muted-foreground',
+          className,
+        )}
+        title={attachment.name}
+      >
+        {attachment.name}
+      </span>
+    );
+  }
+
   if (attachment.kind === "image") {
     return (
       <>
