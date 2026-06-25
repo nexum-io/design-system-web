@@ -124,7 +124,7 @@ export function CopyChip({
         {copied ? <Check className="text-success" /> : <Copy />}
       </Button>
       <span role="status" aria-live="polite" className="sr-only">
-        {copied ? copiedLabel : ''}
+        {copied ? copiedLabel : null}
       </span>
     </span>
   );
