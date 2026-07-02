@@ -8,7 +8,7 @@ Quick reference for the most commonly used design tokens.
 >
 > **Showcase-only:** `HeroSection`, `FeatureCard`, `KpiCard` appear in `DesignSystemShowcase` / audit pages — not used in production landing (`LandingHero` uses primitives directly).
 >
-> **Deprecated:** `Badge` primitive — migrate to `StatusBadge`. See [escrow/docs/DESIGN_SYSTEM.md](../../../docs/DESIGN_SYSTEM.md).
+> **Deprecated:** `Badge` primitive — migrate to `StatusBadge`. See [escrow/escrow-docs/DESIGN_SYSTEM.md](../../../escrow-docs/DESIGN_SYSTEM.md).
 
 ## 🎨 Colors
 
