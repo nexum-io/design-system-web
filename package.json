@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "description": "Nexum shared design system — tokens, shadcn/Radix primitives, and components for Tailwind v4 + React 19.",
   "type": "module",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nexum-io/design-system-web.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",
-    "access": "restricted"
+    "access": "public"
   },
   "sideEffects": [
     "**/*.css"
@@ -68,6 +68,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
+    "prepare": "npm run build",
     "build": "npm run sync:design-system && tsup && node scripts/copy-styles.mjs",
     "sync:design-system": "node scripts/sync-design-system.mjs",
     "check": "node scripts/sync-design-system.mjs --check",
