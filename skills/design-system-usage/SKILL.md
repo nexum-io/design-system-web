@@ -1,6 +1,6 @@
 ---
 name: design-system-usage
-description: How to build UI with the shared design system (@c-escrow/design-system) in this project. Use when creating or editing any UI — choosing a component, color, spacing, radius or typography token, styling with Tailwind, or adding a new screen. Enforces: import from @/design-system, semantic --ds-* tokens only (no raw hex or gray-500), dark mode via the .dark class, reuse components over hand-rolled markup.
+description: How to build UI with the shared design system (@nexum-io/design-system) in this project. Use when creating or editing any UI — choosing a component, color, spacing, radius or typography token, styling with Tailwind, or adding a new screen. Enforces: import from @/design-system, semantic --ds-* tokens only (no raw hex or gray-500), dark mode via the .dark class, reuse components over hand-rolled markup.
 ---
 
 # Using the Design System

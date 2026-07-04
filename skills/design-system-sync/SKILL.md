@@ -1,6 +1,6 @@
 ---
 name: design-system-sync
-description: Updates this project's design system to the shared canonical one (@c-escrow/design-system), which is mounted as a git submodule at src/design-system. Use when asked to update/refresh the design system, pull the latest DS, bump the design-system version, or adopt the DS in a new project. Only moves the submodule pointer (+ first-time wiring) — never touches app logic.
+description: Updates this project's design system to the shared canonical one (@nexum-io/design-system), which is mounted as a git submodule at src/design-system. Use when asked to update/refresh the design system, pull the latest DS, bump the design-system version, or adopt the DS in a new project. Only moves the submodule pointer (+ first-time wiring) — never touches app logic.
 ---
 
 # Design System Sync (git submodule)
@@ -32,7 +32,7 @@ Run the app + the `/design-system` route (if present) in light and dark.
 ## First-time adoption (new project)
 
 ```bash
-git submodule add git@cryptoner.gitlab.yandexcloud.net:development/design-system.git src/design-system
+git submodule add git@github.com:nexum-io/design-system-web.git src/design-system
 node src/design-system/scripts/install-skills.mjs --to .
 ```
 
