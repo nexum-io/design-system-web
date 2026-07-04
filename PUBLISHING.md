@@ -15,4 +15,17 @@ npm run changeset        # record intent
 
 ## Consumer setup
 
-See README.md — apps need `.npmrc` + `NPM_TOKEN` with `read:packages`.
+Public repo (no token):
+
+```json
+"@nexum-io/design-system": "git+https://github.com/nexum-io/design-system-web.git#v0.1.0"
+```
+
+GitHub Packages (semver):
+
+```ini
+@nexum-io:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NPM_TOKEN}
+```
+
+See README.md for full install instructions.

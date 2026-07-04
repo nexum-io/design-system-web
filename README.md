@@ -2,7 +2,7 @@
 
 Private npm package for Nexum apps — design tokens, shadcn/Radix primitives, and composed components for **Tailwind v4 + React 19**.
 
-Published to **GitHub Packages** (`npm.pkg.github.com`). Consumed as a normal semver dependency — no git submodules or SSH git URLs.
+Shared React + Tailwind v4 design system for Nexum products. Consumed as `@nexum-io/design-system` — public git HTTPS dependency or GitHub Packages semver.
 
 ## Install
 
@@ -118,6 +118,6 @@ The consuming app must provide:
 - `react` / `react-dom` ^19
 - `tailwindcss` ^4 (+ `@tailwindcss/vite`, `tw-animate-css` in the app)
 
-## Migration from git submodule / git dependency
+## Publishing
 
-See `MIGRATION.md` in the consuming app repo for the landing migration notes.
+See [`PUBLISHING.md`](PUBLISHING.md).
