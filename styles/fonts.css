@@ -1,0 +1,9 @@
+/* Inter font from Google Fonts - modern, clean, highly readable */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Font family — same stack as --ds-font-family-sans (tokens/core.json).
+     Type scale / line-height / tracking come from Tailwind's default theme
+     (--text-*, --leading-*, --tracking-*) — no duplicates here. */
+  --font-sans: var(--ds-font-family-sans);
+}

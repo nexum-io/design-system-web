@@ -1,0 +1,354 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 16px;
+  /* shadcn surface tokens — derived from the DS single source of truth (--ds-*).
+     Edit colors in tokens/*.json (re-skin), never here. */
+  --background: var(--ds-bg);
+  --foreground: var(--ds-fg);
+  --card: var(--ds-bg);
+  --card-foreground: var(--ds-fg);
+  --popover: var(--ds-bg);
+  --popover-foreground: var(--ds-fg);
+  --primary: var(--ds-primary);
+  --primary-foreground: var(--ds-primary-fg);
+  --secondary: var(--ds-bg-muted);
+  --secondary-foreground: var(--ds-fg);
+  --muted: var(--ds-bg-muted);
+  --muted-foreground: var(--ds-fg-muted);
+  --accent: var(--ds-bg-hover);
+  --accent-foreground: var(--ds-fg);
+  --destructive: var(--ds-danger);
+  --destructive-foreground: var(--ds-fg-on-primary);
+  --border: var(--ds-border);
+  --input: transparent;
+  --input-background: var(--ds-bg-subtle);
+  --switch-background: var(--ds-border-strong);
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  /* Focus ring: brand, solid (WCAG 2.4.13 — ≥2px, contrast ≥3:1) */
+  --ring: var(--ds-primary);
+  --chart-1: var(--ds-color-purple-600);
+  --chart-2: var(--ds-color-blue-600);
+  --chart-3: var(--ds-color-emerald-600);
+  --chart-4: var(--ds-color-amber-500);
+  --chart-5: var(--ds-color-red-500);
+  --radius: var(--ds-radius-lg);
+  --sidebar: var(--ds-bg-subtle);
+  --sidebar-foreground: var(--ds-fg);
+  --sidebar-primary: var(--ds-primary);
+  --sidebar-primary-foreground: var(--ds-primary-fg);
+  --sidebar-accent: var(--ds-bg-muted);
+  --sidebar-accent-foreground: var(--ds-fg);
+  --sidebar-border: var(--ds-border);
+  --sidebar-ring: var(--ds-primary);
+
+  /* Shadows — single-sourced from --ds-shadow-* */
+  --shadow-xs: var(--ds-shadow-xs);
+  --shadow-sm: var(--ds-shadow-sm);
+  --shadow-md: var(--ds-shadow-md);
+  --shadow-lg: var(--ds-shadow-lg);
+  --shadow-xl: var(--ds-shadow-xl);
+  --shadow-2xl: var(--ds-shadow-2xl);
+
+  /* Card shadows — single-sourced from --ds-shadow-card* */
+  --shadow-card: var(--ds-shadow-card);
+  --shadow-card-hover: var(--ds-shadow-card-hover);
+  --shadow-card-hover-accent: var(--ds-shadow-card-hover-accent);
+
+  /* ===== Design System Brand Aliases ===== */
+  /* Map DS tokens to Tailwind-friendly names */
+  --brand: var(--ds-primary);
+  --brand-hover: var(--ds-primary-hover);
+  --brand-subtle: var(--ds-primary-subtle);
+  --brand-fg: var(--ds-primary-fg);
+  --brand-gradient-from: var(--ds-color-purple-600);
+  --brand-gradient-to: var(--ds-color-purple-500);
+  --brand-gradient-hover-from: var(--ds-color-purple-700);
+  --brand-gradient-hover-to: var(--ds-color-purple-600);
+}
+
+.dark {
+  --background: var(--ds-bg);
+  --foreground: var(--ds-fg);
+  --card: var(--ds-bg);
+  --card-foreground: var(--ds-fg);
+  --popover: var(--ds-bg);
+  --popover-foreground: var(--ds-fg);
+  /* Solid primary surfaces keep purple-600 in dark: white label = 6.42:1 (AA).
+     --ds-primary itself stays purple-500 for text/accents (5.09:1 on dark bg). */
+  --primary: var(--ds-color-purple-600);
+  --primary-foreground: var(--ds-primary-fg);
+  --secondary: var(--ds-bg-muted);
+  --secondary-foreground: var(--ds-fg);
+  --muted: var(--ds-bg-muted);
+  --muted-foreground: var(--ds-fg-muted);
+  --accent: var(--ds-bg-hover);
+  --accent-foreground: var(--ds-fg);
+  --destructive: var(--ds-danger);
+  --destructive-foreground: var(--ds-fg-on-primary);
+  --border: var(--ds-border);
+  --input: var(--ds-border);
+  --input-background: var(--ds-bg-subtle);
+  --switch-background: var(--ds-bg-muted);
+  --ring: var(--ds-primary);
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --chart-1: var(--ds-color-purple-400);
+  --chart-2: var(--ds-color-blue-400);
+  --chart-3: var(--ds-color-emerald-400);
+  --chart-4: var(--ds-color-amber-400);
+  --chart-5: var(--ds-color-red-400);
+  --sidebar: var(--ds-bg-subtle);
+  --sidebar-foreground: var(--ds-fg);
+  --sidebar-primary: var(--ds-primary);
+  --sidebar-primary-foreground: var(--ds-primary-fg);
+  --sidebar-accent: var(--ds-bg-muted);
+  --sidebar-accent-foreground: var(--ds-fg);
+  --sidebar-border: var(--ds-border);
+  --sidebar-ring: var(--ds-primary);
+
+  /* Brand aliases re-declared: custom-property substitution is eager (resolved
+     where declared), so :root values would otherwise freeze the LIGHT palette. */
+  --brand: var(--ds-color-purple-600);
+  --brand-hover: var(--ds-color-purple-700);
+  --brand-subtle: var(--ds-primary-subtle);
+  --brand-fg: var(--ds-primary-fg);
+  --brand-gradient-from: var(--ds-color-purple-600);
+  --brand-gradient-to: var(--ds-color-purple-500);
+  --brand-gradient-hover-from: var(--ds-color-purple-700);
+  --brand-gradient-hover-to: var(--ds-color-purple-600);
+
+  --shadow-xs: var(--ds-shadow-xs);
+  --shadow-sm: var(--ds-shadow-sm);
+  --shadow-md: var(--ds-shadow-md);
+  --shadow-lg: var(--ds-shadow-lg);
+  --shadow-xl: var(--ds-shadow-xl);
+  --shadow-2xl: var(--ds-shadow-2xl);
+  --shadow-card: var(--ds-shadow-card);
+  --shadow-card-hover: var(--ds-shadow-card-hover);
+  --shadow-card-hover-accent: var(--ds-shadow-card-hover-accent);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* DS Brand Colors */
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-subtle: var(--brand-subtle);
+  --color-brand-fg: var(--brand-fg);
+
+  /* DS Semantic Colors */
+  --color-ds-bg: var(--ds-bg);
+  --color-ds-bg-subtle: var(--ds-bg-subtle);
+  --color-ds-bg-muted: var(--ds-bg-muted);
+  --color-ds-fg: var(--ds-fg);
+  --color-ds-fg-muted: var(--ds-fg-muted);
+  --color-ds-fg-subtle: var(--ds-fg-subtle);
+  --color-ds-border: var(--ds-border);
+  --color-ds-border-muted: var(--ds-border-muted);
+  --color-ds-success: var(--ds-success);
+  --color-ds-success-subtle: var(--ds-success-subtle);
+  --color-ds-success-fg: var(--ds-success-fg);
+  --color-ds-warning: var(--ds-warning);
+  --color-ds-warning-subtle: var(--ds-warning-subtle);
+  --color-ds-warning-fg: var(--ds-warning-fg);
+  --color-ds-danger: var(--ds-danger);
+  --color-ds-danger-subtle: var(--ds-danger-subtle);
+  --color-ds-danger-fg: var(--ds-danger-fg);
+  --color-ds-info: var(--ds-info);
+  --color-ds-info-subtle: var(--ds-info-subtle);
+  --color-ds-info-fg: var(--ds-info-fg);
+
+  /* ===== Un-prefixed DS utilities (bg-bg-muted, text-fg-muted, bg-success, text-success-fg, …) ===== */
+  /* Surfaces */
+  --color-bg-subtle: var(--ds-bg-subtle);
+  --color-bg-muted: var(--ds-bg-muted);
+  --color-bg-hover: var(--ds-bg-hover);
+  --color-bg-elevated: var(--ds-bg-elevated);
+  --color-fg-muted: var(--ds-fg-muted);
+  --color-fg-subtle: var(--ds-fg-subtle);
+  --color-border-muted: var(--ds-border-muted);
+  --color-border-strong: var(--ds-border-strong);
+  /* Status */
+  --color-success: var(--ds-success);
+  --color-success-subtle: var(--ds-success-subtle);
+  --color-success-fg: var(--ds-success-fg);
+  --color-warning: var(--ds-warning);
+  --color-warning-subtle: var(--ds-warning-subtle);
+  --color-warning-fg: var(--ds-warning-fg);
+  --color-danger: var(--ds-danger);
+  --color-danger-subtle: var(--ds-danger-subtle);
+  --color-danger-fg: var(--ds-danger-fg);
+  --color-info: var(--ds-info);
+  --color-info-subtle: var(--ds-info-subtle);
+  --color-info-fg: var(--ds-info-fg);
+
+  /* Type-scale aliases (text-2xs / text-md / text-display* — registered in utils/cx.ts for tw-merge) */
+  --text-2xs: var(--ds-font-size-2xs);
+  --text-md: var(--ds-font-size-md);
+  --text-display-sm: var(--ds-font-size-display-sm);
+  --text-display: var(--ds-font-size-display);
+  --text-display-lg: var(--ds-font-size-display-lg);
+
+  /* Radius parity */
+  --radius-2xl: var(--ds-radius-2xl);
+  --radius-full: var(--ds-radius-full);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /**
+  * Default typography styles for HTML elements (h1-h4, p, label, button, input).
+  * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
+  */
+
+  html {
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: var(--ds-font-size-3xl);
+    font-weight: var(--ds-font-weight-bold);
+    line-height: var(--ds-line-height-tight);
+    letter-spacing: var(--ds-tracking-tight);
+  }
+
+  h2 {
+    font-size: var(--ds-font-size-2xl);
+    font-weight: var(--ds-font-weight-semibold);
+    line-height: var(--ds-line-height-tight);
+    letter-spacing: var(--ds-tracking-tight);
+  }
+
+  h3 {
+    font-size: var(--ds-font-size-xl);
+    font-weight: var(--ds-font-weight-semibold);
+    line-height: var(--ds-line-height-snug);
+  }
+
+  h4 {
+    font-size: var(--ds-font-size-lg);
+    font-weight: var(--ds-font-weight-semibold);
+    line-height: var(--ds-line-height-snug);
+  }
+
+  h5 {
+    font-size: var(--ds-font-size-base);
+    font-weight: var(--ds-font-weight-semibold);
+    line-height: var(--ds-line-height-normal);
+  }
+
+  h6 {
+    font-size: var(--ds-font-size-sm);
+    font-weight: var(--ds-font-weight-semibold);
+    line-height: var(--ds-line-height-normal);
+  }
+
+  p {
+    font-size: var(--ds-font-size-sm);
+    line-height: var(--ds-line-height-relaxed);
+  }
+
+  label {
+    font-size: var(--ds-font-size-sm);
+    font-weight: var(--ds-font-weight-medium);
+    line-height: var(--ds-line-height-normal);
+  }
+
+  button {
+    font-size: var(--ds-font-size-sm);
+    font-weight: var(--ds-font-weight-medium);
+    line-height: var(--ds-line-height-normal);
+  }
+
+  input, textarea, select {
+    font-size: var(--ds-font-size-sm);
+    font-weight: var(--ds-font-weight-normal);
+    line-height: var(--ds-line-height-normal);
+  }
+}
+
+/* ===== Reduced motion (WCAG 2.3.3 / prefers-reduced-motion) ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== Sonner status toasts — DS status tokens (match StatusBadge) =====
+   Three attribute selectors out-rank sonner's injected [data-sonner-toast][data-styled]
+   rule regardless of stylesheet order. */
+[data-sonner-toast][data-styled='true'][data-type='success'] {
+  background: var(--ds-success-subtle);
+  color: var(--ds-success-fg);
+  border-color: color-mix(in oklab, var(--ds-success) 25%, transparent);
+}
+[data-sonner-toast][data-styled='true'][data-type='error'] {
+  background: var(--ds-danger-subtle);
+  color: var(--ds-danger-fg);
+  border-color: color-mix(in oklab, var(--ds-danger) 25%, transparent);
+}
+[data-sonner-toast][data-styled='true'][data-type='warning'] {
+  background: var(--ds-warning-subtle);
+  color: var(--ds-warning-fg);
+  border-color: color-mix(in oklab, var(--ds-warning) 25%, transparent);
+}
+[data-sonner-toast][data-styled='true'][data-type='info'] {
+  background: var(--ds-info-subtle);
+  color: var(--ds-info-fg);
+  border-color: color-mix(in oklab, var(--ds-info) 25%, transparent);
+}
