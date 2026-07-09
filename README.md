@@ -39,7 +39,7 @@ or in the component `.tsx`, then `npm run sync:design-system` and commit. Never 
 
 ```bash
 # from the app repo root, on a feature branch:
-git submodule add git@cryptoner.gitlab.yandexcloud.net:development/design-system.git src/design-system
+git submodule add git@github.com:nexum-io/escrow-design-system.git src/design-system
 ```
 
 Then wire it once:

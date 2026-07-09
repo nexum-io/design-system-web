@@ -5,7 +5,7 @@ description: Updates this project's design system to the shared canonical one (@
 
 # Design System Sync (git submodule)
 
-The shared DS lives in `development/design-system` (GitLab) and is mounted here as a **git submodule**
+The shared DS lives in `nexum-io/escrow-design-system` (GitHub) and is mounted here as a **git submodule**
 at `src/design-system`. "Sync" = move the submodule pointer — the DS files are never copied into this repo.
 
 ## Update to the latest / a tagged version
@@ -32,7 +32,7 @@ Run the app + the `/design-system` route (if present) in light and dark.
 ## First-time adoption (new project)
 
 ```bash
-git submodule add git@cryptoner.gitlab.yandexcloud.net:development/design-system.git src/design-system
+git submodule add git@github.com:nexum-io/escrow-design-system.git src/design-system
 node src/design-system/scripts/install-skills.mjs --to .
 ```
 
