@@ -1,3 +1,5 @@
+"use client";
+
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import * as React from 'react';
@@ -93,7 +95,7 @@ export interface SigningSheetProps {
   contentClassName?: string;
 }
 
-const DEFAULT_FLOWS: Record<SigningSheetIntent, SigningSheetStepConfig['id'][]> = {
+export const DEFAULT_FLOWS: Record<SigningSheetIntent, SigningSheetStepConfig['id'][]> = {
   auth: ['connect_wallet', 'signing', 'completed'],
   'connect-only': ['connect_wallet', 'completed'],
   operation: ['review', 'signing', 'completed'],
@@ -127,8 +129,10 @@ export function deriveNodeStatuses(
 
   const failed = step === 'failed' || Boolean(error);
   const targetId = step === 'failed'
-    ? (failedStep ?? nodes[Math.max(nodes.length - 2, 0)]?.id)
-    : (COLLAPSE[step] ?? step);
+    ? (failedStep
+      ? (nodes.some((n) => n.id === failedStep) ? failedStep : (COLLAPSE[failedStep] ?? failedStep))
+      : nodes[Math.max(nodes.length - 2, 0)]?.id)
+    : (nodes.some((n) => n.id === step) ? step : (COLLAPSE[step] ?? step));
   const activeIndex = nodes.findIndex((node) => node.id === targetId);
 
   return nodes.map((_, index) => {

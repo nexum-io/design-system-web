@@ -36,7 +36,7 @@ export type {
   ThreadSendInput,
 } from './DisputeThread';
 
-export { SigningSheet, deriveNodeStatuses } from './SigningSheet';
+export { SigningSheet, deriveNodeStatuses, DEFAULT_FLOWS } from './SigningSheet';
 export type {
   SigningSheetProps,
   SigningSheetLabels,

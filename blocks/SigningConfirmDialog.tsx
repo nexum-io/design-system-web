@@ -22,7 +22,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../primitives/alert-dialog";
-import { buttonVariants } from "../primitives/button";
 import { Alert, AlertDescription } from "../primitives/alert";
 import { Label } from "../primitives/label";
 import { Textarea } from "../primitives/textarea";

@@ -31,6 +31,18 @@ describe("deriveNodeStatuses", () => {
     expect(deriveNodeStatuses(customNodes, "failed", null, "signing")).toEqual(["upcoming", "error"]);
     expect(deriveNodeStatuses(customNodes, "signing")).toEqual(["upcoming", "upcoming"]);
   });
+
+  it("keeps an explicit executing node active instead of collapsing", () => {
+    const fourNodes = [
+      { id: "review" as const }, { id: "signing" as const },
+      { id: "executing" as const }, { id: "completed" as const },
+    ];
+    expect(deriveNodeStatuses(fourNodes, "executing")).toEqual(["completed", "completed", "active", "upcoming"]);
+  });
+
+  it("collapses failedStep onto its rendered node", () => {
+    expect(deriveNodeStatuses(opNodes, "failed", null, "executing")).toEqual(["completed", "error", "upcoming"]);
+  });
 });
 
 describe("SigningSheet indicator", () => {
