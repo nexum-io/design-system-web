@@ -4,3 +4,4 @@ dist
 design-system.html
 *.local
 .DS_Store
+storybook-static

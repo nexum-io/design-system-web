@@ -74,6 +74,10 @@
     "check": "node scripts/sync-design-system.mjs --check",
     "typecheck": "tsc --noEmit",
     "lint": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
     "prepublishOnly": "npm run build && npm run check",
     "changeset": "changeset",
     "version-packages": "changeset version",
@@ -112,12 +116,22 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.2",
+    "@storybook/react-vite": "^9.0.0",
+    "@tailwindcss/vite": "^4.1.0",
+    "@testing-library/jest-dom": "^6.6.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "jsdom": "^26.0.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "storybook": "^9.0.0",
+    "tailwindcss": "^4.1.0",
     "tsup": "^8.5.0",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.3",
+    "vite": "^6.0.0",
+    "vitest": "^3.2.0"
   },
   "engines": {
     "node": ">=20"
