@@ -17,5 +17,17 @@
       "@/design-system/*": ["./*"]
     }
   },
-  "include": ["index.ts", "tokens.ts", "components", "primitives", "blocks", "layouts", "utils", "examples"]
+  "include": [
+    "index.ts",
+    "tokens.ts",
+    "components",
+    "primitives",
+    "blocks",
+    "layouts",
+    "utils",
+    "examples",
+    "stories",
+    ".storybook",
+    "vitest.setup.ts"
+  ]
 }
