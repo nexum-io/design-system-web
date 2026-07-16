@@ -1,14 +1,14 @@
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import * as React from 'react';
-import { Circle, X } from 'lucide-react';
+import { CheckCircle2, ClipboardCheck, FileSignature, Wallet, X } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetTitle,
 } from '../primitives/sheet';
-import { StepIndicator, type StepIndicatorItem } from './StepIndicator';
+import { StepIndicator, type StepIndicatorItem, type StepIndicatorStatus } from './StepIndicator';
 import { SigningConfirmDialog } from './SigningConfirmDialog';
 import { cx } from '../utils/cx';
 
@@ -24,8 +24,9 @@ import { cx } from '../utils/cx';
  * confirm state (and any local state a consumer keys to `[itemId, intent]`)
  * drops whenever those identity props change or the sheet closes.
  *
- * Shell only — Task A4 derives `steps`/status from `intent` + `step` + `error`
- * instead of the placeholder mapping used here.
+ * The step-indicator strip's nodes default from `intent` (`DEFAULT_FLOWS`) and
+ * their statuses derive from `step` + `error` + `failedStep` via
+ * `deriveNodeStatuses` (see below); both are overridable via `steps`.
  */
 
 export type SigningSheetIntent = 'auth' | 'connect-only' | 'operation';
@@ -92,6 +93,55 @@ export interface SigningSheetProps {
   contentClassName?: string;
 }
 
+const DEFAULT_FLOWS: Record<SigningSheetIntent, SigningSheetStepConfig['id'][]> = {
+  auth: ['connect_wallet', 'signing', 'completed'],
+  'connect-only': ['connect_wallet', 'completed'],
+  operation: ['review', 'signing', 'completed'],
+};
+
+/** Flow steps that render on another node ("single-signer shortcut"). */
+const COLLAPSE: Partial<Record<SigningStep, SigningStep>> = { executing: 'signing' };
+
+const DEFAULT_ICONS: Record<SigningSheetStepConfig['id'], LucideIcon> = {
+  review: ClipboardCheck,
+  connect_wallet: Wallet,
+  signing: FileSignature,
+  executing: FileSignature,
+  completed: CheckCircle2,
+};
+
+/**
+ * Derive step-indicator node statuses from the current signing flow state.
+ * When the active step is not found in custom nodes (activeIndex === -1) and a failure occurred,
+ * the last node is marked 'error' to surface the failure; all other nodes show 'upcoming' since
+ * progress information is unavailable for mismatched flows.
+ */
+export function deriveNodeStatuses(
+  nodes: SigningSheetStepConfig[],
+  step: SigningStep,
+  error?: string | null,
+  failedStep?: SigningStep,
+): StepIndicatorStatus[] {
+  if (step === 'completed') return nodes.map(() => 'completed');
+  if (step === 'idle') return nodes.map(() => 'upcoming');
+
+  const failed = step === 'failed' || Boolean(error);
+  const targetId = step === 'failed'
+    ? (failedStep ?? nodes[Math.max(nodes.length - 2, 0)]?.id)
+    : (COLLAPSE[step] ?? step);
+  const activeIndex = nodes.findIndex((node) => node.id === targetId);
+
+  return nodes.map((_, index) => {
+    if (activeIndex === -1) {
+      if (failed && index === nodes.length - 1) return 'error';
+      return 'upcoming';
+    }
+    if (index < activeIndex) return 'completed';
+    if (index === activeIndex) return failed ? 'error' : 'active';
+    return 'upcoming';
+  });
+}
+
 export function SigningSheet({
   open,
   onOpenChange,
@@ -138,11 +188,16 @@ export function SigningSheet({
     onOpenChange(false);
   }
 
-  const stepItems: StepIndicatorItem[] = (steps ?? []).map((stepConfig) => ({
-    id: stepConfig.id,
-    label: stepConfig.label ?? labels.steps?.[stepConfig.id] ?? stepConfig.id,
-    icon: stepConfig.icon ?? stepIcons?.[stepConfig.id] ?? Circle,
-    status: 'inactive',
+  const nodes = React.useMemo<SigningSheetStepConfig[]>(
+    () => steps ?? DEFAULT_FLOWS[intent].map((id) => ({ id })),
+    [steps, intent],
+  );
+  const statuses = deriveNodeStatuses(nodes, step, error, failedStep);
+  const stepItems: StepIndicatorItem[] = nodes.map((node, index) => ({
+    id: node.id,
+    label: node.label ?? labels.steps?.[node.id] ?? node.id,
+    icon: node.icon ?? stepIcons?.[node.id] ?? DEFAULT_ICONS[node.id],
+    status: statuses[index],
   }));
 
   return (
@@ -189,7 +244,7 @@ export function SigningSheet({
           {busy && labels.busyHint ? <p className="mt-2 text-xs text-white/80">{labels.busyHint}</p> : null}
         </div>
 
-        {!hideStepIndicator && steps && steps.length > 0 ? (
+        {!hideStepIndicator && nodes.length > 0 ? (
           <div
             data-slot="signing-sheet-steps"
             className="shrink-0 border-b border-border-muted px-4 py-3 sm:px-6"
