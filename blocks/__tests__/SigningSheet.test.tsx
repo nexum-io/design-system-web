@@ -71,4 +71,38 @@ describe("SigningSheet shell", () => {
     expect(warn).not.toHaveBeenCalled();
     warn.mockRestore();
   });
+
+  it("intercepts close with a confirm dialog when closeConfirm is set", async () => {
+    const { onOpenChange } = renderSheet({
+      closeConfirm: { title: "Abandon signing?", confirmLabel: "Abandon", cancelLabel: "Stay" },
+    });
+    await userEvent.click(screen.getByRole("button", { name: "Close" }));
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(screen.getByRole("alertdialog", { name: "Abandon signing?" })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Abandon" }));
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("drops a pending close-confirm when itemId changes", async () => {
+    const closeConfirm = { title: "Abandon signing?", confirmLabel: "Abandon", cancelLabel: "Stay" };
+    const sheet = (itemId: string) => (
+      <SigningSheet
+        open
+        onOpenChange={vi.fn()}
+        intent="operation"
+        step="review"
+        title="Confirm deposit"
+        labels={labels}
+        closeConfirm={closeConfirm}
+        itemId={itemId}
+      >
+        <p>body</p>
+      </SigningSheet>
+    );
+    const { rerender } = render(sheet("deal-1"));
+    await userEvent.click(screen.getByRole("button", { name: "Close" }));
+    expect(screen.getByRole("alertdialog")).toBeInTheDocument();
+    rerender(sheet("deal-2"));
+    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
+  });
 });

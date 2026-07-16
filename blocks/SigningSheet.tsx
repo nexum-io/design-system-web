@@ -1,5 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
+import * as React from 'react';
 import { Circle, X } from 'lucide-react';
 import {
   Sheet,
@@ -8,6 +9,7 @@ import {
   SheetTitle,
 } from '../primitives/sheet';
 import { StepIndicator, type StepIndicatorItem } from './StepIndicator';
+import { SigningConfirmDialog } from './SigningConfirmDialog';
 import { cx } from '../utils/cx';
 
 /**
@@ -17,11 +19,13 @@ import { cx } from '../utils/cx';
  * flows: gradient header (title/subtitle/close), a static step-indicator strip,
  * a scrollable body, and a sticky footer. `busy` blocks every close affordance
  * (visibly disabled close button, swallowed Esc/overlay dismissal) so the user
- * can't dismiss the sheet mid-signature.
+ * can't dismiss the sheet mid-signature. An optional `closeConfirm` interposes
+ * a nested `SigningConfirmDialog` before a non-busy close is honored; pending
+ * confirm state (and any local state a consumer keys to `[itemId, intent]`)
+ * drops whenever those identity props change or the sheet closes.
  *
- * Shell only — Task A3 adds a nested confirm-on-close dialog and resets local
- * state on `[itemId, intent]` change; Task A4 derives `steps`/status from
- * `intent` + `step` + `error` instead of the placeholder mapping used here.
+ * Shell only — Task A4 derives `steps`/status from `intent` + `step` + `error`
+ * instead of the placeholder mapping used here.
  */
 
 export type SigningSheetIntent = 'auth' | 'connect-only' | 'operation';
@@ -49,6 +53,14 @@ export interface SigningSheetLabels {
   busyHint?: string;
 }
 
+export interface SigningSheetCloseConfirm {
+  title: string;
+  description?: string;
+  confirmLabel: string;
+  cancelLabel: string;
+  destructive?: boolean;
+}
+
 export interface SigningSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -65,6 +77,8 @@ export interface SigningSheetProps {
   error?: string | null;
   /** Blocks every close affordance: visibly disabled close button, swallowed Esc/overlay/onOpenChange. */
   busy?: boolean;
+  /** When set, a non-busy close attempt opens this confirm dialog instead of closing immediately. */
+  closeConfirm?: SigningSheetCloseConfirm | null;
   steps?: SigningSheetStepConfig[];
   stepIcons?: Partial<Record<SigningStep, LucideIcon>>;
   hideStepIndicator?: boolean;
@@ -91,6 +105,7 @@ export function SigningSheet({
   itemId,
   error,
   busy = false,
+  closeConfirm,
   steps,
   stepIcons,
   hideStepIndicator = false,
@@ -101,8 +116,25 @@ export function SigningSheet({
   className,
   contentClassName,
 }: SigningSheetProps) {
+  const [confirmOpen, setConfirmOpen] = React.useState(false);
+
+  // Drop any pending close-confirm when the signed item's identity changes —
+  // it belonged to the previous item/intent, not this one.
+  React.useEffect(() => {
+    setConfirmOpen(false);
+  }, [itemId, intent]);
+
+  // Drop it on close too, so it doesn't flash open the next time the sheet opens.
+  React.useEffect(() => {
+    if (!open) setConfirmOpen(false);
+  }, [open]);
+
   function requestClose() {
     if (busy) return;
+    if (closeConfirm) {
+      setConfirmOpen(true);
+      return;
+    }
     onOpenChange(false);
   }
 
@@ -187,6 +219,23 @@ export function SigningSheet({
           </div>
         ) : null}
       </SheetContent>
+
+      {closeConfirm ? (
+        <SigningConfirmDialog
+          open={confirmOpen}
+          onOpenChange={setConfirmOpen}
+          title={closeConfirm.title}
+          description={closeConfirm.description}
+          confirmLabel={closeConfirm.confirmLabel}
+          cancelLabel={closeConfirm.cancelLabel}
+          destructive={closeConfirm.destructive}
+          resetKey={`${intent}:${itemId ?? ''}`}
+          onConfirm={() => {
+            setConfirmOpen(false);
+            onOpenChange(false);
+          }}
+        />
+      ) : null}
     </Sheet>
   );
 }
