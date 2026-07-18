@@ -9,6 +9,12 @@ export { DetailRow, type DetailRowProps } from './DetailRow';
 export { SectionHeader, type SectionHeaderProps } from './SectionHeader';
 export { StepIndicator, type StepIndicatorProps, type StepIndicatorItem, type StepIndicatorStatus } from './StepIndicator';
 export { StepStatusPanel, type StepStatusPanelProps, type StepStatusPanelStatus } from './StepStatusPanel';
+export {
+  SignStepTimeline,
+  type SignStepTimelineProps,
+  type SignStepTimelineStep,
+  type SignStepTimelineStatus,
+} from './SignStepTimeline';
 export { GradientDialog, type GradientDialogProps } from './GradientDialog';
 
 export { OpenDisputeModal } from './OpenDisputeModal';
