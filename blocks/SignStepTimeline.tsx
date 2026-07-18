@@ -28,12 +28,12 @@ const markerClass: Record<SignStepTimelineStatus, string> = {
 
 export function SignStepTimeline({ steps, ariaLabel, className }: SignStepTimelineProps) {
   return (
-    <ol className={cx("flex flex-col gap-0", className)} role="list" aria-label={ariaLabel}>
+    <ol className={cx("flex flex-col gap-0", className)} aria-label={ariaLabel}>
       {steps.map((step, index) => {
         const showBody = step.status === "active" || step.status === "error";
         const isLast = index === steps.length - 1;
         return (
-          <li key={step.id} className="relative flex gap-3" role="listitem">
+          <li key={step.id} className="relative flex gap-3">
             <div className="flex w-8 shrink-0 flex-col items-center">
               <div
                 className={cx(
