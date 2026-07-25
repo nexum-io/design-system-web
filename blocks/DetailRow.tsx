@@ -13,7 +13,7 @@ export function DetailRow({ label, children, last, className }: DetailRowProps) 
   return (
     <div
       className={cx(
-        'flex items-center justify-between py-2',
+        'flex flex-col items-start gap-1 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0',
         !last && 'border-b border-border-muted',
         className,
       )}
