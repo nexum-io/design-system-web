@@ -24,12 +24,6 @@ import {
 } from "@nexum-io/design-system";
 ```
 
-Deep layout import:
-
-```ts
-import { CabinetShell } from "@nexum-io/design-system/layouts/cabinet";
-```
-
 ## Persistence keys
 
 | key | values | default (missing/invalid) |
