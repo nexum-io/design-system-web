@@ -47,4 +47,41 @@ describe('cabinet persistence', () => {
     writeCabinetLocale('ru', storage);
     expect(readCabinetLocale(storage)).toBe('ru');
   });
+
+  it('returns defaults when setItem throws (QuotaExceededError / private mode)', () => {
+    const quotaError = new DOMException('QuotaExceededError', 'QuotaExceededError');
+    const throwingStorage = memoryStorage();
+    throwingStorage.setItem = () => {
+      throw quotaError;
+    };
+
+    expect(() => readCabinetTheme(throwingStorage)).not.toThrow();
+    expect(readCabinetTheme(throwingStorage)).toBe('light');
+
+    expect(() => readCabinetLocale(throwingStorage)).not.toThrow();
+    expect(readCabinetLocale(throwingStorage)).toBe('en');
+  });
+
+  it('write does not throw when setItem throws', () => {
+    const quotaError = new DOMException('QuotaExceededError', 'QuotaExceededError');
+    const throwingStorage = memoryStorage();
+    throwingStorage.setItem = () => {
+      throw quotaError;
+    };
+
+    expect(() => writeCabinetTheme('dark', throwingStorage)).not.toThrow();
+    expect(() => writeCabinetLocale('ru', throwingStorage)).not.toThrow();
+  });
+
+  it('returns defaults when getItem throws', () => {
+    const throwingStorage = memoryStorage({ [CABINET_THEME_KEY]: 'dark' });
+    throwingStorage.getItem = () => {
+      throw new DOMException('SecurityError');
+    };
+
+    expect(() => readCabinetTheme(throwingStorage)).not.toThrow();
+    expect(readCabinetTheme(throwingStorage)).toBe('light');
+    expect(() => readCabinetLocale(throwingStorage)).not.toThrow();
+    expect(readCabinetLocale(throwingStorage)).toBe('en');
+  });
 });
