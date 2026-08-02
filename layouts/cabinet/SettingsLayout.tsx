@@ -11,8 +11,12 @@ export interface SettingsLayoutProps {
   children: ReactNode;
 }
 
+function getNodeEnv(): string | undefined {
+  return (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV;
+}
+
 export function assertRequiredSettingsSections(sections: SettingsSection[]): void {
-  if (process.env.NODE_ENV === 'production') {
+  if (getNodeEnv() === 'production') {
     return;
   }
 
