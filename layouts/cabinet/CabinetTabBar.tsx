@@ -39,7 +39,7 @@ export function CabinetTabBar({
               active ? 'text-primary' : 'text-muted-foreground hover:text-foreground',
             )}
           >
-            <span className="relative flex flex-col items-center gap-1">
+            <span className="relative flex max-w-full min-w-0 flex-col items-center gap-1">
               {item.icon ? <span className="shrink-0 [&>svg]:size-5">{item.icon}</span> : null}
               <span className="max-w-full truncate">{item.label}</span>
               {item.badge != null ? (
