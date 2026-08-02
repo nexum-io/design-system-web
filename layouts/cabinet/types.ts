@@ -12,6 +12,8 @@ export interface CabinetNavItem {
   href: string;
   icon?: ReactNode;
   external?: boolean;
+  /** Optional trailing badge (count, status). Omitted = no badge. */
+  badge?: ReactNode;
 }
 
 export interface CabinetNavSection {
