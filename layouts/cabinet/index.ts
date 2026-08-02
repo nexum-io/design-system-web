@@ -22,3 +22,7 @@ export {
   writeCabinetLocale,
   writeCabinetTheme,
 } from './persistence';
+export { ThemeToggle } from './ThemeToggle';
+export type { ThemeToggleProps } from './ThemeToggle';
+export { LocaleSwitch } from './LocaleSwitch';
+export type { LocaleSwitchProps } from './LocaleSwitch';
