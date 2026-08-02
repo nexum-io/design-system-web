@@ -36,3 +36,7 @@ export { CabinetTabBar } from './CabinetTabBar';
 export type { CabinetTabBarProps } from './CabinetTabBar';
 export { CabinetMobileNavSheet } from './CabinetMobileNavSheet';
 export type { CabinetMobileNavSheetProps } from './CabinetMobileNavSheet';
+export { SettingsLayout, assertRequiredSettingsSections } from './SettingsLayout';
+export type { SettingsLayoutProps } from './SettingsLayout';
+export { CabinetShell } from './CabinetShell';
+export type { CabinetShellProps } from './CabinetShell';
