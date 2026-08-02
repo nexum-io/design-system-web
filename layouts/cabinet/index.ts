@@ -26,3 +26,5 @@ export { ThemeToggle } from './ThemeToggle';
 export type { ThemeToggleProps } from './ThemeToggle';
 export { LocaleSwitch } from './LocaleSwitch';
 export type { LocaleSwitchProps } from './LocaleSwitch';
+export { CabinetSheet } from './CabinetSheet';
+export type { CabinetSheetProps } from './CabinetSheet';
