@@ -60,6 +60,33 @@ describe('CabinetSidebar', () => {
     expect(screen.getByText('Org').closest('[data-slot="cabinet-org"]')).not.toBeNull();
   });
 
+  it('renders external nav items as new-tab anchors', () => {
+    render(
+      <CabinetSidebar
+        {...defaultProps}
+        sections={[
+          {
+            id: 'products',
+            label: 'Additional products',
+            items: [
+              {
+                id: 'escrow',
+                label: 'Escrow',
+                href: 'http://app.escrow.nexum.localhost:8080',
+                external: true,
+              },
+            ],
+          },
+        ]}
+      />,
+    );
+
+    const link = screen.getByRole('link', { name: 'Escrow' });
+    expect(link).toHaveAttribute('href', 'http://app.escrow.nexum.localhost:8080');
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
   it('pins settings and footer content above the collapse control', async () => {
     const onCollapsedChange = vi.fn();
     const { container } = render(
