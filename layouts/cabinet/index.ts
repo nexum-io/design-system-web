@@ -28,3 +28,5 @@ export { LocaleSwitch } from './LocaleSwitch';
 export type { LocaleSwitchProps } from './LocaleSwitch';
 export { CabinetSheet } from './CabinetSheet';
 export type { CabinetSheetProps } from './CabinetSheet';
+export { CabinetSidebar } from './CabinetSidebar';
+export type { CabinetSidebarProps } from './CabinetSidebar';
