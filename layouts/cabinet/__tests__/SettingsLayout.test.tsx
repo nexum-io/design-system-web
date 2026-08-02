@@ -18,6 +18,19 @@ describe('SettingsLayout', () => {
     ).toThrow(/theme/);
   });
 
+  it('does not throw in production when required sections are missing', () => {
+    const previousNodeEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'production';
+
+    try {
+      expect(() =>
+        assertRequiredSettingsSections([{ id: 'wallet', label: 'Wallet', href: '/settings/wallet' }]),
+      ).not.toThrow();
+    } finally {
+      process.env.NODE_ENV = previousNodeEnv;
+    }
+  });
+
   it('renders section navigation and children', () => {
     render(
       <SettingsLayout

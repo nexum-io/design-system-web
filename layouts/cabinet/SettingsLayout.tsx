@@ -12,6 +12,10 @@ export interface SettingsLayoutProps {
 }
 
 export function assertRequiredSettingsSections(sections: SettingsSection[]): void {
+  if (process.env.NODE_ENV === 'production') {
+    return;
+  }
+
   const sectionIds = new Set(sections.map((section) => section.id));
   const missingIds = ['theme', 'language'].filter((id) => !sectionIds.has(id));
 
