@@ -1,7 +1,7 @@
 # Unified product cabinet shell
 
 Date: 2026-08-02  
-Status: approved  
+Status: implemented (consumer PRs open)
 Approach: composable DS primitives + thin `CabinetShell` (Approach 2)
 
 ## Goal
