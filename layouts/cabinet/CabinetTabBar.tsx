@@ -39,8 +39,15 @@ export function CabinetTabBar({
               active ? 'text-primary' : 'text-muted-foreground hover:text-foreground',
             )}
           >
-            {item.icon ? <span className="shrink-0 [&>svg]:size-5">{item.icon}</span> : null}
-            <span className="max-w-full truncate">{item.label}</span>
+            <span className="relative flex flex-col items-center gap-1">
+              {item.icon ? <span className="shrink-0 [&>svg]:size-5">{item.icon}</span> : null}
+              <span className="max-w-full truncate">{item.label}</span>
+              {item.badge != null ? (
+                <span data-slot="cabinet-nav-badge" className="absolute end-0 top-0 shrink-0 -translate-y-1/2">
+                  {item.badge}
+                </span>
+              ) : null}
+            </span>
           </Link>
         );
       })}
