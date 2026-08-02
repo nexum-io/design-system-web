@@ -21,6 +21,24 @@ function TestLink({
   );
 }
 
+const defaultProps = {
+  open: false,
+  onOpenChange: vi.fn(),
+  brand: { name: 'Nexum' },
+  sections: [
+    {
+      id: 'main',
+      label: 'Main',
+      items: [{ id: 'home', label: 'Home', href: '/' }],
+    },
+  ],
+  settingsHref: '/settings',
+  settingsLabel: 'Settings',
+  linkComponent: TestLink,
+  isActive: (href: string) => href === '/',
+  closeLabel: 'Close navigation',
+};
+
 describe('CabinetMobileNavSheet', () => {
   it('renders left navigation and closes when a link is selected', async () => {
     const onOpenChange = vi.fn();
@@ -71,5 +89,28 @@ describe('CabinetMobileNavSheet', () => {
     );
 
     expect(screen.getByText('Acme')).toBeInTheDocument();
+  });
+
+  it('renders nav item badge', () => {
+    render(
+      <CabinetMobileNavSheet
+        {...defaultProps}
+        open
+        sections={[
+          {
+            id: 'main',
+            items: [
+              {
+                id: 'active',
+                label: 'Active',
+                href: '/active',
+                badge: <span data-testid="m-badge">2</span>,
+              },
+            ],
+          },
+        ]}
+      />,
+    );
+    expect(screen.getByTestId('m-badge')).toHaveTextContent('2');
   });
 });

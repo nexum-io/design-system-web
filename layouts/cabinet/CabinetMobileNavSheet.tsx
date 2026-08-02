@@ -89,6 +89,11 @@ export function CabinetMobileNavSheet({
                     >
                       {item.icon ? <span className="shrink-0 [&>svg]:size-4">{item.icon}</span> : null}
                       <span className="truncate">{item.label}</span>
+                      {item.badge != null ? (
+                        <span data-slot="cabinet-nav-badge" className="ms-auto shrink-0">
+                          {item.badge}
+                        </span>
+                      ) : null}
                     </Link>
                   );
                 })}

@@ -40,7 +40,7 @@ export function CabinetSidebar({
   function getLinkClassName(active: boolean): string {
     return cx(
       'flex min-h-10 items-center rounded-lg px-3 text-sm transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring',
-      collapsed ? 'justify-center' : 'gap-3',
+      collapsed ? 'relative justify-center' : 'gap-3',
       active
         ? 'bg-sidebar-accent text-sidebar-accent-foreground'
         : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
@@ -91,6 +91,14 @@ export function CabinetSidebar({
                   >
                     {item.icon ? <span className="shrink-0">{item.icon}</span> : null}
                     <span className={cx('truncate', collapsed && 'sr-only')}>{item.label}</span>
+                    {item.badge != null ? (
+                      <span
+                        data-slot="cabinet-nav-badge"
+                        className={cx('ms-auto shrink-0', collapsed && 'absolute end-1 top-1')}
+                      >
+                        {item.badge}
+                      </span>
+                    ) : null}
                   </Link>
                 );
               })}

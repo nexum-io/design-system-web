@@ -20,7 +20,31 @@ function TestLink({
   );
 }
 
+const defaultProps = {
+  menuLabel: 'Menu',
+  onOpenMenu: vi.fn(),
+  linkComponent: TestLink,
+  isActive: () => false,
+};
+
 describe('CabinetTabBar', () => {
+  it('renders compact badge on tab items when provided', () => {
+    render(
+      <CabinetTabBar
+        {...defaultProps}
+        items={[
+          {
+            id: 'active',
+            label: 'Active',
+            href: '/active',
+            badge: <span data-testid="tab-badge">4</span>,
+          },
+        ]}
+      />,
+    );
+    expect(screen.getByTestId('tab-badge')).toHaveTextContent('4');
+  });
+
   it('renders tabs and opens the menu', async () => {
     const onOpenMenu = vi.fn();
     render(

@@ -87,4 +87,31 @@ describe('CabinetSidebar', () => {
     expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Settings' })).toBeInTheDocument();
   });
+
+  it('renders item.badge after the label when provided', () => {
+    render(
+      <CabinetSidebar
+        {...defaultProps}
+        sections={[
+          {
+            id: 'main',
+            items: [
+              {
+                id: 'active',
+                label: 'Active',
+                href: '/active',
+                badge: <span data-testid="nav-badge">3</span>,
+              },
+            ],
+          },
+        ]}
+      />,
+    );
+    expect(screen.getByTestId('nav-badge')).toHaveTextContent('3');
+  });
+
+  it('omits badge region when badge is undefined', () => {
+    const { container } = render(<CabinetSidebar {...defaultProps} />);
+    expect(container.querySelector('[data-slot="cabinet-nav-badge"]')).toBeNull();
+  });
 });

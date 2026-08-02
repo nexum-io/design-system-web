@@ -1,10 +1,10 @@
 # CabinetShell
 
-Unified authenticated cabinet chrome for **business**, **heth**, and **escrow**
-user apps: collapsible sidebar (Settings pinned at bottom), minimal topbar,
-mobile tab bar + nav sheet, and shared settings layout primitives. The shell is
-**presentation + structure only** — apps supply nav registries, auth callbacks,
-org widgets, page content, and all i18n labels.
+Unified authenticated cabinet chrome for **business**, **heth**, **escrow**,
+**escrow-admin-web**, and **escrow-arbitrator-web** user apps: collapsible sidebar
+(Settings pinned at bottom), minimal topbar, mobile tab bar + nav sheet, and shared
+settings layout primitives. The shell is **presentation + structure only** — apps
+supply nav registries, auth callbacks, org widgets, page content, and all i18n labels.
 
 ## Import paths
 
@@ -39,6 +39,8 @@ Sidebar collapse state is **app-owned** (not persisted by DS).
 - **Optional** — omit the prop when the product has no org context (escrow).
 - **business / heth** — pass the existing org switcher / entity scope widget
   here; it renders in the sidebar (desktop) and mobile nav sheet.
+- **escrow-arbitrator-web** — may pass profile UI via `orgSlot` (same rules as
+  business/heth).
 - DS does **not** render a placeholder when omitted — no org UI appears.
 - Org fetch errors and loading states belong inside the slot content the app
   provides; the shell does not mask them.
@@ -171,6 +173,12 @@ import { SettingsLayout } from "@nexum-io/design-system";
 Theme and language panels should call the same `writeCabinetTheme` /
 `writeCabinetLocale` helpers (or controlled state lifted to the cabinet root) so
 topbar controls and Settings stay aligned.
+
+## Nav badges
+
+`CabinetNavItem.badge?: ReactNode` is optional. When set, DS renders it in the
+sidebar, mobile nav sheet, and tab bar (`data-slot="cabinet-nav-badge"`).
+Tone/count markup is app-owned. Omit the prop for no badge.
 
 ## Related exports
 
