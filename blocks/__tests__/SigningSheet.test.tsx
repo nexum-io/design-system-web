@@ -28,6 +28,11 @@ function renderSheet(props: Partial<SigningSheetProps> = {}) {
 }
 
 describe("SigningSheet shell", () => {
+  it("renders through cabinet-sheet chrome", () => {
+    renderSheet();
+    expect(document.querySelector('[data-slot="cabinet-sheet"]')).toBeInTheDocument();
+  });
+
   it("renders an accessible dialog titled by the header", () => {
     renderSheet();
     expect(screen.getByRole("dialog", { name: "Confirm deposit" })).toBeInTheDocument();
