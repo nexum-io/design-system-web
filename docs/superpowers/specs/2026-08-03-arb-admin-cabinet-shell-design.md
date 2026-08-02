@@ -1,7 +1,7 @@
 # Arb + admin cabinet shell adoption
 
 Date: 2026-08-03  
-Status: approved (plan ready)  
+Status: implemented  
 Approach: A — same consumer pattern as user cabinets + additive `CabinetNavItem.badge`
 
 Extends: [`2026-08-02-unified-cabinet-shell-design.md`](./2026-08-02-unified-cabinet-shell-design.md) (Phases A–D shipped; DS `@nexum-io/design-system@0.2.0`).
