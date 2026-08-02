@@ -78,7 +78,32 @@ export function CabinetMobileNavSheet({
               ) : null}
               <div className="space-y-1">
                 {section.items.map((item) => {
-                  const active = isActive(item.href);
+                  const active = !item.external && isActive(item.href);
+                  const content = (
+                    <>
+                      {item.icon ? <span className="shrink-0 [&>svg]:size-4">{item.icon}</span> : null}
+                      <span className="truncate">{item.label}</span>
+                      {item.badge != null ? (
+                        <span data-slot="cabinet-nav-badge" className="ms-auto shrink-0">
+                          {item.badge}
+                        </span>
+                      ) : null}
+                    </>
+                  );
+                  if (item.external) {
+                    return (
+                      <a
+                        key={item.id}
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={closeSheet}
+                        className={getLinkClassName(false)}
+                      >
+                        {content}
+                      </a>
+                    );
+                  }
                   return (
                     <Link
                       key={item.id}
@@ -87,13 +112,7 @@ export function CabinetMobileNavSheet({
                       aria-current={active ? 'page' : undefined}
                       className={getLinkClassName(active)}
                     >
-                      {item.icon ? <span className="shrink-0 [&>svg]:size-4">{item.icon}</span> : null}
-                      <span className="truncate">{item.label}</span>
-                      {item.badge != null ? (
-                        <span data-slot="cabinet-nav-badge" className="ms-auto shrink-0">
-                          {item.badge}
-                        </span>
-                      ) : null}
+                      {content}
                     </Link>
                   );
                 })}

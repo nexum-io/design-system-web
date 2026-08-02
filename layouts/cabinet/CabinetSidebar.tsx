@@ -81,14 +81,9 @@ export function CabinetSidebar({
             ) : null}
             <div className="space-y-1">
               {section.items.map((item) => {
-                const active = isActive(item.href);
-                return (
-                  <Link
-                    key={item.id}
-                    to={item.href}
-                    className={getLinkClassName(active)}
-                    aria-current={active ? 'page' : undefined}
-                  >
+                const active = !item.external && isActive(item.href);
+                const content = (
+                  <>
                     {item.icon ? <span className="shrink-0">{item.icon}</span> : null}
                     <span className={cx('truncate', collapsed && 'sr-only')}>{item.label}</span>
                     {item.badge != null ? (
@@ -99,6 +94,29 @@ export function CabinetSidebar({
                         {item.badge}
                       </span>
                     ) : null}
+                  </>
+                );
+                if (item.external) {
+                  return (
+                    <a
+                      key={item.id}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={getLinkClassName(false)}
+                    >
+                      {content}
+                    </a>
+                  );
+                }
+                return (
+                  <Link
+                    key={item.id}
+                    to={item.href}
+                    className={getLinkClassName(active)}
+                    aria-current={active ? 'page' : undefined}
+                  >
+                    {content}
                   </Link>
                 );
               })}
