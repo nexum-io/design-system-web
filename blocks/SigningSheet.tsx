@@ -4,12 +4,8 @@ import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import * as React from 'react';
 import { CheckCircle2, ClipboardCheck, FileSignature, Wallet, X } from 'lucide-react';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetTitle,
-} from '../primitives/sheet';
+import { SheetDescription, SheetTitle } from '../primitives/sheet';
+import { CabinetSheet } from '../layouts/cabinet/CabinetSheet';
 import { StepIndicator, type StepIndicatorItem, type StepIndicatorStatus } from './StepIndicator';
 import { SigningConfirmDialog } from './SigningConfirmDialog';
 import { cx } from '../utils/cx';
@@ -192,6 +188,15 @@ export function SigningSheet({
     onOpenChange(false);
   }
 
+  function handleOpenChange(nextOpen: boolean) {
+    if (nextOpen) {
+      onOpenChange(true);
+      return;
+    }
+
+    requestClose();
+  }
+
   const nodes = React.useMemo<SigningSheetStepConfig[]>(
     () => steps ?? DEFAULT_FLOWS[intent].map((id) => ({ id })),
     [steps, intent],
@@ -205,49 +210,54 @@ export function SigningSheet({
   }));
 
   return (
-    <Sheet open={open} onOpenChange={(next) => (next ? onOpenChange(true) : requestClose())}>
-      <SheetContent
-        side="right"
-        hideCloseButton
-        {...(subtitle ? undefined : { "aria-describedby": "" })}
-        className={cx('w-full gap-0 border-l-0 p-0 sm:max-w-md sm:border-l', className)}
-      >
-        <div
-          data-slot="signing-sheet-header"
-          className="shrink-0 bg-gradient-to-r from-(--brand-gradient-from) to-(--brand-gradient-to) px-4 py-4 sm:px-6 sm:py-5"
-        >
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex min-w-0 items-center gap-3">
-              {icon ? (
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
-                  {icon}
-                </div>
-              ) : null}
-              <div className="min-w-0">
-                <SheetTitle className="text-base font-semibold text-white sm:text-xl">{title}</SheetTitle>
-                {subtitle ? (
-                  <SheetDescription className="text-sm text-white/80">{subtitle}</SheetDescription>
+    <>
+      <CabinetSheet
+        open={open}
+        onOpenChange={handleOpenChange}
+        title={title}
+        description={subtitle}
+        closeLabel={labels.close}
+        preventDismiss={busy}
+        className={className}
+        bodyClassName="contents"
+        header={
+          <div
+            data-slot="signing-sheet-header"
+            className="shrink-0 bg-gradient-to-r from-(--brand-gradient-from) to-(--brand-gradient-to) px-4 py-4 sm:px-6 sm:py-5"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex min-w-0 items-center gap-3">
+                {icon ? (
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
+                    {icon}
+                  </div>
                 ) : null}
+                <div className="min-w-0">
+                  <SheetTitle className="text-base font-semibold text-white sm:text-xl">{title}</SheetTitle>
+                  {subtitle ? (
+                    <SheetDescription className="text-sm text-white/80">{subtitle}</SheetDescription>
+                  ) : null}
+                </div>
               </div>
+              <button
+                type="button"
+                onClick={requestClose}
+                disabled={busy}
+                className={cx(
+                  'flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-lg p-2 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-white',
+                  busy ? 'cursor-not-allowed text-white/30' : 'cursor-pointer text-white/80 hover:text-white',
+                )}
+                aria-label={labels.close}
+                aria-disabled={busy || undefined}
+              >
+                <X className="h-5 w-5" />
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={requestClose}
-              disabled={busy}
-              className={cx(
-                'flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-lg p-2 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-white',
-                busy ? 'cursor-not-allowed text-white/30' : 'cursor-pointer text-white/80 hover:text-white',
-              )}
-              aria-label={labels.close}
-              aria-disabled={busy || undefined}
-            >
-              <X className="h-5 w-5" />
-            </button>
+            {badge ? <div className="mt-2">{badge}</div> : null}
+            {busy && labels.busyHint ? <p className="mt-2 text-xs text-white/80">{labels.busyHint}</p> : null}
           </div>
-          {badge ? <div className="mt-2">{badge}</div> : null}
-          {busy && labels.busyHint ? <p className="mt-2 text-xs text-white/80">{labels.busyHint}</p> : null}
-        </div>
-
+        }
+      >
         {!hideStepIndicator && nodes.length > 0 ? (
           <div
             data-slot="signing-sheet-steps"
@@ -277,7 +287,7 @@ export function SigningSheet({
             {footer}
           </div>
         ) : null}
-      </SheetContent>
+      </CabinetSheet>
 
       {closeConfirm ? (
         <SigningConfirmDialog
@@ -295,6 +305,6 @@ export function SigningSheet({
           }}
         />
       ) : null}
-    </Sheet>
+    </>
   );
 }
