@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1
+
+### Patch Changes
+
+- 9fa1d18: Render `CabinetNavItem.external` as new-tab anchors in sidebar and mobile nav.
+- 8c05889: Add optional `CabinetNavItem.badge` for sidebar, mobile nav, and tab bar counts.
+
 ## 0.2.0
 
 ### Minor Changes

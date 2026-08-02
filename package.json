@@ -1,6 +1,6 @@
 {
   "name": "@nexum-io/design-system",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Nexum shared design system — tokens, shadcn/Radix primitives, and components for Tailwind v4 + React 19.",
   "type": "module",
   "license": "MIT",
