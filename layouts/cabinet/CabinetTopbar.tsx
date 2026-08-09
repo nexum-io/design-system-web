@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, ChevronRight, LogOut } from 'lucide-react';
+import { ChevronDown, ChevronRight, LifeBuoy, LogOut } from 'lucide-react';
 import { Button } from '../../primitives/button';
 import {
   DropdownMenu,
@@ -109,6 +109,12 @@ export function CabinetTopbar({
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                 </>
+              ) : null}
+              {auth.supportLabel && auth.onSupport ? (
+                <DropdownMenuItem onSelect={auth.onSupport}>
+                  <LifeBuoy aria-hidden />
+                  {auth.supportLabel}
+                </DropdownMenuItem>
               ) : null}
               <DropdownMenuItem onSelect={auth.onSignOut}>
                 <LogOut aria-hidden />
