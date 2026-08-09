@@ -45,6 +45,9 @@ export interface CabinetAuthSignedIn {
   subtitle?: string;
   signOutLabel: string;
   onSignOut: () => void;
+  /** Optional Support menu item — rendered before Sign out only when both are set. */
+  supportLabel?: string;
+  onSupport?: () => void;
 }
 
 export type CabinetAuth = CabinetAuthSignedOut | CabinetAuthSignedIn;

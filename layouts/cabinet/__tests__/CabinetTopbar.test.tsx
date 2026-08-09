@@ -65,4 +65,46 @@ describe('CabinetTopbar', () => {
     await userEvent.click(screen.getByRole('menuitem', { name: 'Sign Out' }));
     expect(onSignOut).toHaveBeenCalledOnce();
   });
+
+  it('shows Support menu item before Sign out when supportLabel and onSupport are set', async () => {
+    const onSupport = vi.fn();
+    render(
+      <CabinetTopbar
+        {...defaultProps}
+        auth={{
+          status: 'signed_in',
+          label: 'Alex',
+          signOutLabel: 'Sign Out',
+          onSignOut: vi.fn(),
+          supportLabel: 'Support',
+          onSupport,
+        }}
+      />,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Alex' }));
+    const items = screen.getAllByRole('menuitem');
+    expect(items.map((item) => item.textContent)).toEqual(['Support', 'Sign Out']);
+
+    await userEvent.click(screen.getByRole('menuitem', { name: 'Support' }));
+    expect(onSupport).toHaveBeenCalledOnce();
+  });
+
+  it('omits the Support menu item when support props are not provided', async () => {
+    render(
+      <CabinetTopbar
+        {...defaultProps}
+        auth={{
+          status: 'signed_in',
+          label: 'Alex',
+          signOutLabel: 'Sign Out',
+          onSignOut: vi.fn(),
+        }}
+      />,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Alex' }));
+    expect(screen.getAllByRole('menuitem')).toHaveLength(1);
+    expect(screen.queryByRole('menuitem', { name: 'Support' })).not.toBeInTheDocument();
+  });
 });
