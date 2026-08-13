@@ -30,6 +30,7 @@ export interface CabinetTopbarProps {
   onLocaleChange: (locale: CabinetLocale) => void;
   auth: CabinetAuth;
   labels: Pick<CabinetLabels, 'themeToLight' | 'themeToDark' | 'language'>;
+  showLocaleSwitch?: boolean;
 }
 
 export function CabinetTopbar({
@@ -41,6 +42,7 @@ export function CabinetTopbar({
   onLocaleChange,
   auth,
   labels,
+  showLocaleSwitch = true,
 }: CabinetTopbarProps) {
   return (
     <header
@@ -84,11 +86,13 @@ export function CabinetTopbar({
           labelToLight={labels.themeToLight}
           labelToDark={labels.themeToDark}
         />
-        <LocaleSwitch
-          locale={locale}
-          onLocaleChange={onLocaleChange}
-          ariaLabel={labels.language}
-        />
+        {showLocaleSwitch ? (
+          <LocaleSwitch
+            locale={locale}
+            onLocaleChange={onLocaleChange}
+            ariaLabel={labels.language}
+          />
+        ) : null}
         {auth.status === 'signed_out' ? (
           <Button type="button" onClick={auth.onSignIn}>
             {auth.signInLabel}
