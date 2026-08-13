@@ -90,6 +90,12 @@ describe('CabinetTopbar', () => {
     expect(onSupport).toHaveBeenCalledOnce();
   });
 
+  it('hides locale switch when showLocaleSwitch is false', () => {
+    render(<CabinetTopbar {...defaultProps} showLocaleSwitch={false} />);
+
+    expect(screen.queryByRole('group', { name: 'Language' })).not.toBeInTheDocument();
+  });
+
   it('omits the Support menu item when support props are not provided', async () => {
     render(
       <CabinetTopbar

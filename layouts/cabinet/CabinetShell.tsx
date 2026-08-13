@@ -35,6 +35,7 @@ export interface CabinetShellProps {
   isActive: (href: string) => boolean;
   orgSlot?: ReactNode;
   sidebarFooterSlot?: ReactNode;
+  showLocaleSwitch?: boolean;
   children: ReactNode;
 }
 
@@ -56,6 +57,7 @@ export function CabinetShell({
   isActive,
   orgSlot,
   sidebarFooterSlot,
+  showLocaleSwitch = true,
   children,
 }: CabinetShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -86,6 +88,7 @@ export function CabinetShell({
           onLocaleChange={onLocaleChange}
           auth={auth}
           labels={labels}
+          showLocaleSwitch={showLocaleSwitch}
         />
         <main className="flex-1 p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] sm:p-6 md:pb-6">
           {children}
