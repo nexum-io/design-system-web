@@ -25,7 +25,7 @@ export function CabinetTabBar({
   return (
     <nav
       data-slot="cabinet-tab-bar"
-      className="fixed inset-x-0 bottom-0 z-(--ds-z-sticky) flex border-t border-border bg-background pb-[env(safe-area-inset-bottom,0px)] md:hidden"
+      className="fixed inset-x-0 bottom-0 z-(--ds-z-sticky) flex min-h-(--ds-cabinet-tab-bar-height) border-t border-border bg-background pb-[env(safe-area-inset-bottom,0px)] md:hidden"
     >
       {items.map((item) => {
         const active = isActive(item.href);

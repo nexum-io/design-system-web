@@ -180,6 +180,37 @@ topbar controls and Settings stay aligned.
 sidebar, mobile nav sheet, and tab bar (`data-slot="cabinet-nav-badge"`).
 Tone/count markup is app-owned. Omit the prop for no badge.
 
+## Bottom inset for app-level sticky bars
+
+`CabinetTabBar` is `fixed bottom-0` with `z-(--ds-z-sticky)` below `md`. Any
+app-owned `fixed`/`sticky` bottom element (deal CTA bar, create-form footer,
+dev FAB) that also sits at `bottom-0` collides with it. Two tokens
+(`tokens/core.json` → `styles/tokens.css`, `tokens.cabinet.*`) describe the
+reservation; `styles/theme.css` resets the inset on the same `md` variant that
+hides the tab bar:
+
+| variable | value |
+|---|---|
+| `--ds-cabinet-tab-bar-height` | `3.5rem` — floor of the `<nav>` box (`min-h`); today's bar renders as 3.5rem + 1px top border (+ safe area) |
+| `--ds-cabinet-bottom-inset` | `calc(var(--ds-cabinet-tab-bar-height) + 1px + env(safe-area-inset-bottom, 0px))` below `md`, `0px` at `>= md` |
+
+Consumers offset with the inset and need no `md:` prefixes:
+
+```tsx
+// fixed action bar above the tab bar (own safe-area padding only where the tab bar is absent)
+<div className="fixed bottom-(--ds-cabinet-bottom-inset) inset-x-0 z-(--ds-z-sticky) pb-[env(safe-area-inset-bottom,0px)] max-md:pb-0 lg:hidden">…</div>
+// sticky form footer inside main
+<div className="sticky bottom-(--ds-cabinet-bottom-inset) sm:static">…</div>
+// content that must end above the tab bar
+<section className="pb-(--ds-cabinet-bottom-inset)">…</section>
+// floating button that must not cover the Menu tab
+<button className="fixed right-4 bottom-[calc(var(--ds-cabinet-bottom-inset)+1rem)]">…</button>
+```
+
+The variables live on `:root` (not on the shell root) so that elements mounted
+outside `CabinetShell` (dev switchers, toasters) can use them too. `<main>`
+keeps its own `pb-[calc(5rem+env(safe-area-inset-bottom))]` reserve.
+
 ## Related exports
 
 | export | role |

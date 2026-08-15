@@ -71,6 +71,7 @@ function coreVarName(parts) {
     case 'shadow': return `--ds-shadow-${rest.join('-')}`;
     case 'tracking': return `--ds-tracking-${rest.join('-')}`;
     case 'zIndex': return `--ds-z-${rest.join('-')}`;
+    case 'cabinet': return `--ds-cabinet-${rest.map(kebab).join('-')}`;
     case 'breakpoint': return `--ds-bp-${rest.join('-')}`;
     case 'font': {
       const [sub, ...r2] = rest;
@@ -187,6 +188,7 @@ function buildCss() {
   out.push(...emitPrimitiveBlock('Border Radius', core.radius, (k) => `--ds-radius-${k}`));
   out.push(...emitPrimitiveBlock('Shadows', core.shadow, (k) => `--ds-shadow-${k}`));
   out.push(...emitPrimitiveBlock('Z-index', core.zIndex, (k) => `--ds-z-${k}`));
+  out.push(...emitPrimitiveBlock('Cabinet shell chrome (CabinetTabBar reservation; theme.css resets the inset at >= md)', core.cabinet, (k) => `--ds-cabinet-${kebab(k)}`));
   out.push('  /* Motion */');
   for (const [k, t] of Object.entries(core.motion.duration)) out.push(`  --ds-duration-${k}: ${t.value};`);
   for (const [k, t] of Object.entries(core.motion.easing)) out.push(`  --ds-ease-${k}: ${t.value};`);
@@ -272,6 +274,7 @@ function buildTs() {
     radius: mapPrimitive(core.radius, (k) => `--ds-radius-${k}`),
     shadow: mapPrimitive(core.shadow, (k) => `--ds-shadow-${k}`),
     zIndex: mapPrimitive(core.zIndex, (k) => `--ds-z-${k}`),
+    cabinet: mapPrimitive(core.cabinet, (k) => `--ds-cabinet-${kebab(k)}`),
     motion: {
       duration: mapPrimitive(core.motion.duration, (k) => `--ds-duration-${k}`),
       easing: mapPrimitive(core.motion.easing, (k) => `--ds-ease-${k}`),
@@ -303,6 +306,7 @@ export type TrackingToken = keyof typeof tokens.tracking;
 export type RadiusToken = keyof typeof tokens.radius;
 export type ShadowToken = keyof typeof tokens.shadow;
 export type ZIndexToken = keyof typeof tokens.zIndex;
+export type CabinetToken = keyof typeof tokens.cabinet;
 export type BreakpointToken = keyof typeof tokens.breakpoint;
 export type TypographyToken = keyof typeof tokens.typography;
 

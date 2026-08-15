@@ -66,6 +66,15 @@
   --brand-gradient-to: var(--ds-color-purple-500);
   --brand-gradient-hover-from: var(--ds-color-purple-700);
   --brand-gradient-hover-to: var(--ds-color-purple-600);
+
+  /* ===== Cabinet bottom chrome ===== */
+  /* `--ds-cabinet-tab-bar-height` / `--ds-cabinet-bottom-inset` are defined in
+     tokens.css (tokens/core.json). CabinetTabBar is `md:hidden`, so the inset is
+     reset on the same Tailwind breakpoint. Keep `0px` (not unitless 0): consumers
+     compose it as `calc(var(--ds-cabinet-bottom-inset) + 1rem)`. */
+  @variant md {
+    --ds-cabinet-bottom-inset: 0px;
+  }
 }
 
 .dark {

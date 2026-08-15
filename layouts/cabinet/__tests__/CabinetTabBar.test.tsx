@@ -65,4 +65,14 @@ describe('CabinetTabBar', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Menu' }));
     expect(onOpenMenu).toHaveBeenCalledOnce();
   });
+
+  it('floors its height at --ds-cabinet-tab-bar-height so the bottom-inset contract holds', () => {
+    const { container } = render(
+      <CabinetTabBar {...defaultProps} items={[{ id: 'home', label: 'Home', href: '/' }]} />,
+    );
+    const nav = container.querySelector('[data-slot="cabinet-tab-bar"]');
+    expect(nav).not.toBeNull();
+    expect(nav).toHaveClass('min-h-(--ds-cabinet-tab-bar-height)');
+    expect(nav).toHaveClass('md:hidden');
+  });
 });

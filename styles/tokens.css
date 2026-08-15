@@ -200,6 +200,10 @@
   --ds-z-toast: 1500;
   --ds-z-tooltip: 1600;
 
+  /* Cabinet shell chrome (CabinetTabBar reservation; theme.css resets the inset at >= md) */
+  --ds-cabinet-tab-bar-height: 3.5rem;
+  --ds-cabinet-bottom-inset: calc(var(--ds-cabinet-tab-bar-height) + 1px + env(safe-area-inset-bottom, 0px));
+
   /* Motion */
   --ds-duration-fast: 150ms;
   --ds-duration-base: 200ms;

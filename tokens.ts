@@ -260,6 +260,10 @@ export const tokens = {
     toast: 'var(--ds-z-toast)',
     tooltip: 'var(--ds-z-tooltip)',
   },
+  cabinet: {
+    tabBarHeight: 'var(--ds-cabinet-tab-bar-height)',
+    bottomInset: 'var(--ds-cabinet-bottom-inset)',
+  },
   motion: {
     duration: {
       fast: 'var(--ds-duration-fast)',
@@ -384,6 +388,7 @@ export type TrackingToken = keyof typeof tokens.tracking;
 export type RadiusToken = keyof typeof tokens.radius;
 export type ShadowToken = keyof typeof tokens.shadow;
 export type ZIndexToken = keyof typeof tokens.zIndex;
+export type CabinetToken = keyof typeof tokens.cabinet;
 export type BreakpointToken = keyof typeof tokens.breakpoint;
 export type TypographyToken = keyof typeof tokens.typography;
 
