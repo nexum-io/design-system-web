@@ -730,6 +730,18 @@
       "type": "other"
     }
   },
+  "cabinet": {
+    "tabBarHeight": {
+      "value": "3.5rem",
+      "type": "other",
+      "description": "CabinetTabBar box floor (min-height); the rendered bar is this + 1px top border + safe-area"
+    },
+    "bottomInset": {
+      "value": "calc(var(--ds-cabinet-tab-bar-height) + 1px + env(safe-area-inset-bottom, 0px))",
+      "type": "other",
+      "description": "Space app-level fixed/sticky bars and FABs reserve above CabinetTabBar; theme.css resets it to 0px at >= md where the tab bar is hidden"
+    }
+  },
   "motion": {
     "duration": {
       "fast": {

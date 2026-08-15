@@ -133,6 +133,14 @@ var(--ds-z-sticky)   /* 1100 */   var(--ds-z-popover)  /* 1400 */
 var(--ds-z-toast)    /* 1500 */   var(--ds-z-tooltip)  /* 1600 */
 ```
 
+## 📱 Cabinet bottom chrome
+
+```css
+var(--ds-cabinet-tab-bar-height) /* 3.5rem — CabinetTabBar box floor */
+var(--ds-cabinet-bottom-inset)   /* tab bar + 1px border + safe area below md; 0px at >= md */
+```
+Use `bottom-(--ds-cabinet-bottom-inset)` / `pb-(--ds-cabinet-bottom-inset)` on app-level sticky bars and FABs so they clear the tab bar (see `docs/CabinetShell.md`).
+
 ## 🎞️ Motion
 
 ```css
