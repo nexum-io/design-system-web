@@ -2,6 +2,7 @@ export { PageHeader, type PageHeaderProps } from './PageHeader';
 export { FeatureCard, type FeatureCardProps } from './FeatureCard';
 export { HeroSection, type HeroSectionProps } from './HeroSection';
 export { EmptyState, type EmptyStateProps } from './EmptyState';
+export { FilterChipGroup, type FilterChipGroupProps, type FilterChipOption } from './FilterChipGroup';
 export { SectionBlock, type SectionBlockProps } from './SectionBlock';
 export { ErrorStateCard, type ErrorStateCardProps } from './ErrorStateCard';
 export { FullScreenError, type FullScreenErrorProps } from './FullScreenError';
