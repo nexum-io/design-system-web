@@ -76,15 +76,18 @@ export function OpenDisputeModal({
   const [reason, setReason] = React.useState("");
   const [files, setFiles] = React.useState<File[]>([]);
   const [localError, setLocalError] = React.useState<string | null>(null);
+  const wasOpenRef = React.useRef(false);
 
-  // Reset the form each time the dialog opens.
+  // Reset only on open false→true. Do not depend on `categories` identity —
+  // parents often recreate that array on poll/re-render and must not wipe draft input.
   React.useEffect(() => {
-    if (open) {
+    if (open && !wasOpenRef.current) {
       setCategory(categories[0]?.value ?? "");
       setReason("");
       setFiles([]);
       setLocalError(null);
     }
+    wasOpenRef.current = open;
   }, [open, categories]);
 
   const handleSubmit = (event: React.FormEvent) => {
