@@ -18,14 +18,6 @@ export {
 } from './SignStepTimeline';
 export { GradientDialog, type GradientDialogProps } from './GradientDialog';
 
-export { OpenDisputeModal } from './OpenDisputeModal';
-export type {
-  OpenDisputeModalProps,
-  OpenDisputeLabels,
-  OpenDisputeInput,
-  DisputeCategoryOption,
-} from './OpenDisputeModal';
-
 export { DisputeEvidencePanel } from './DisputeEvidencePanel';
 export type {
   DisputeEvidencePanelProps,
