@@ -10,6 +10,8 @@ export interface SignStepTimelineStep {
   status: SignStepTimelineStatus;
   description?: string;
   result?: ReactNode;
+  /** Optional action slot rendered to the right of the step text (e.g. Disconnect). */
+  trailing?: ReactNode;
   children?: ReactNode;
 }
 
@@ -60,22 +62,32 @@ export function SignStepTimeline({ steps, ariaLabel, className }: SignStepTimeli
                 />
               ) : null}
             </div>
-            <div className={cx("min-w-0 flex-1", isLast ? "pb-0" : "pb-5")}>
-              <p
-                className={cx(
-                  "text-sm font-medium",
-                  step.status === "pending" ? "text-muted-foreground" : "text-foreground",
-                )}
-              >
-                {step.label}
-              </p>
-              {step.description ? (
-                <p className="mt-0.5 text-xs text-muted-foreground">{step.description}</p>
+            <div
+              className={cx(
+                "flex min-w-0 flex-1 items-start gap-3",
+                isLast ? "pb-0" : "pb-5",
+              )}
+            >
+              <div className="min-w-0 flex-1">
+                <p
+                  className={cx(
+                    "text-sm font-medium",
+                    step.status === "pending" ? "text-muted-foreground" : "text-foreground",
+                  )}
+                >
+                  {step.label}
+                </p>
+                {step.description ? (
+                  <p className="mt-0.5 text-xs text-muted-foreground">{step.description}</p>
+                ) : null}
+                {step.result != null ? (
+                  <div className="mt-1 text-xs font-medium text-foreground">{step.result}</div>
+                ) : null}
+                {showBody && step.children ? <div className="mt-3">{step.children}</div> : null}
+              </div>
+              {step.trailing != null ? (
+                <div className="shrink-0 self-start">{step.trailing}</div>
               ) : null}
-              {step.result != null ? (
-                <div className="mt-1 text-xs font-medium text-foreground">{step.result}</div>
-              ) : null}
-              {showBody && step.children ? <div className="mt-3">{step.children}</div> : null}
             </div>
           </li>
         );

@@ -66,4 +66,32 @@ describe("SignStepTimeline", () => {
     expect(screen.getByRole("button", { name: "Retry panel" })).toBeInTheDocument();
     expect(screen.queryByText("Should not show")).toBeNull();
   });
+
+  it("renders trailing action beside completed wallet text", () => {
+    render(
+      <SignStepTimeline
+        ariaLabel="Sign in steps"
+        steps={[
+          {
+            id: "wallet",
+            label: "Wallet",
+            status: "completed",
+            description: "Connect a wallet",
+            result: "Connected · 0xA1…9f",
+            trailing: <button type="button">Disconnect wallet</button>,
+          },
+          {
+            id: "sign",
+            label: "Signature",
+            status: "active",
+          },
+        ]}
+      />,
+    );
+
+    const list = screen.getByRole("list", { name: "Sign in steps" });
+    const walletItem = within(list).getAllByRole("listitem")[0]!;
+    expect(within(walletItem).getByText("Connected · 0xA1…9f")).toBeInTheDocument();
+    expect(within(walletItem).getByRole("button", { name: "Disconnect wallet" })).toBeInTheDocument();
+  });
 });
