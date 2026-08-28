@@ -5,3 +5,7 @@ design-system.html
 *.local
 .DS_Store
 storybook-static
+
+# Agent scratch (Superpowers / SDD) — never commit
+.superpowers/
+.ai-sdd/
