@@ -44,4 +44,42 @@ function formatIsoDate(date: Date): string {
   return `${year}-${month}-${day}`;
 }
 
-export { parseIsoDate, formatIsoDate };
+const ISO_DATE_TIME_PATTERN = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/;
+
+/**
+ * Parses an ISO local date-time (`YYYY-MM-DDTHH:mm`, the `datetime-local`
+ * input contract) into a local-time `Date`. Same UTC-shift avoidance as
+ * {@link parseIsoDate} — never goes through `new Date(string)`. Returns
+ * `undefined` for empty, malformed, or out-of-range input (invalid calendar
+ * date, hour outside 0-23, minute outside 0-59).
+ */
+function parseIsoDateTime(value?: string): Date | undefined {
+  if (!value) return undefined;
+  const match = ISO_DATE_TIME_PATTERN.exec(value);
+  if (!match) return undefined;
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const hours = Number(match[4]);
+  const minutes = Number(match[5]);
+  const date = new Date(year, month - 1, day, hours, minutes);
+
+  const isValid =
+    date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day &&
+    date.getHours() === hours &&
+    date.getMinutes() === minutes;
+
+  return isValid ? date : undefined;
+}
+
+/** Formats a local `Date` back to `YYYY-MM-DDTHH:mm` (zero-padded). */
+function formatIsoDateTime(date: Date): string {
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${formatIsoDate(date)}T${hours}:${minutes}`;
+}
+
+export { parseIsoDate, formatIsoDate, parseIsoDateTime, formatIsoDateTime };
