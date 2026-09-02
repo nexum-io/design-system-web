@@ -28,8 +28,20 @@ describe("formatIsoDate", () => {
 });
 
 describe("DatePicker", () => {
+  // Captured before any test stubs it, so it always holds the real
+  // descriptor (or `undefined` if the environment never defined it).
+  const originalNavigatorLanguage = Object.getOwnPropertyDescriptor(
+    window.navigator,
+    "language",
+  );
+
   afterEach(() => {
     vi.restoreAllMocks();
+    if (originalNavigatorLanguage) {
+      Object.defineProperty(window.navigator, "language", originalNavigatorLanguage);
+    } else {
+      delete (window.navigator as { language?: string }).language;
+    }
   });
 
   it("renders the placeholder and data-empty when value is empty", () => {
@@ -91,6 +103,21 @@ describe("DatePicker", () => {
     expect(onChange).toHaveBeenCalledWith("2026-09-15");
     await waitFor(() => {
       expect(screen.queryByRole("button", { name: /September 15/i })).not.toBeInTheDocument();
+    });
+  });
+
+  it("toggles the value off when the already-selected day is clicked again", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<DatePicker value="2026-09-15" onChange={onChange} locale="en" />);
+    await user.click(screen.getByRole("button", { name: /September 15, 2026/i }));
+    // "th" disambiguates the day-grid cell ("...September 15th, 2026, selected")
+    // from the trigger label ("September 15, 2026"), which is also on screen.
+    const day15 = await screen.findByRole("button", { name: /September 15th/i });
+    await user.click(day15);
+    expect(onChange).toHaveBeenCalledWith("");
+    await waitFor(() => {
+      expect(screen.queryByRole("button", { name: /September 15th/i })).not.toBeInTheDocument();
     });
   });
 
