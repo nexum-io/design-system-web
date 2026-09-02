@@ -39,6 +39,14 @@ export interface DatePickerProps {
   id?: string;
   name?: string;
   className?: string;
+  /**
+   * Overrides the trigger's visible text *and* accessible-description text
+   * (the sr-only span below). Defaults to the formatted date (or
+   * `placeholder` when empty) — omitting it is a no-op change. Lets a
+   * composing consumer (e.g. `DateTimePicker`) show its own richer label
+   * (date + time) without this component knowing anything about time.
+   */
+  label?: React.ReactNode;
   /** Extra props for the popover content (e.g. `align`). */
   contentProps?: React.ComponentProps<typeof PopoverContent>;
   "aria-label"?: string;
@@ -64,6 +72,7 @@ function DatePicker({
   id,
   name,
   className,
+  label: labelProp,
   contentProps,
   "aria-label": ariaLabel,
   "aria-invalid": ariaInvalid,
@@ -87,13 +96,14 @@ function DatePicker({
 
   const dayPickerLocale = DAY_PICKER_LOCALES[locale];
   const intlTag = INTL_LOCALE_TAGS[locale];
-  const label = date
+  const computedLabel = date
     ? new Intl.DateTimeFormat(intlTag, {
         year: "numeric",
         month: "long",
         day: "numeric",
       }).format(date)
     : placeholder;
+  const label = labelProp ?? computedLabel;
 
   const disabledMatchers = [
     ...(minDate ? [{ before: minDate }] : []),

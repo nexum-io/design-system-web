@@ -51,7 +51,13 @@ const ISO_DATE_TIME_PATTERN = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/;
  * input contract) into a local-time `Date`. Same UTC-shift avoidance as
  * {@link parseIsoDate} — never goes through `new Date(string)`. Returns
  * `undefined` for empty, malformed, or out-of-range input (invalid calendar
- * date, hour outside 0-23, minute outside 0-59).
+ * date, hour outside 0-23, minute outside 0-59) — and, by the same
+ * components-round-trip check, for a wall-clock time that doesn't exist in
+ * the runtime's local timezone (a spring-forward DST gap, e.g. `02:30` on
+ * the day clocks jump from 02:00 to 03:00): the `Date` constructor rolls
+ * that moment forward to `03:30`, which fails the round-trip and so is
+ * rejected rather than silently shifted, same spirit as {@link parseIsoDate}
+ * rejecting `"2026-02-30"`.
  */
 function parseIsoDateTime(value?: string): Date | undefined {
   if (!value) return undefined;

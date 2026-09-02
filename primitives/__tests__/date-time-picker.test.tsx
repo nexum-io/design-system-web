@@ -98,12 +98,22 @@ describe("DateTimePicker", () => {
     render(
       <DateTimePicker value="2026-09-02T10:00" onChange={vi.fn()} locale="en" />,
     );
-    await user.click(screen.getByRole("button", { name: /September 2, 2026/i }));
+    await user.click(screen.getByRole("button", { name: /Sep 2, 2026, 10:00/i }));
     await waitFor(() => {
       expect(screen.getByText("September 2026")).toBeInTheDocument();
     });
     expect(screen.getByText("Mo")).toBeInTheDocument();
     expect(screen.queryByText(/сент/i)).not.toBeInTheDocument();
+  });
+
+  it("shows the combined date and time — not just the date — on the trigger", () => {
+    render(<DateTimePicker value="2026-09-02T14:05" onChange={vi.fn()} locale="en" />);
+    // A single query proves both the accessible name (button text) and the
+    // visible label carry the combined `dateStyle: "medium" / timeStyle:
+    // "short" / hour12: false` string — not the date-only label DatePicker
+    // computes on its own.
+    const trigger = screen.getByRole("button", { name: "Sep 2, 2026, 14:05" });
+    expect(trigger).toHaveTextContent("14:05");
   });
 
   it("picking a day then setting a time composes onto the same ISO value, defaulting the time to 00:00 first", async () => {
@@ -131,7 +141,7 @@ describe("DateTimePicker", () => {
     const onChange = vi.fn();
     render(<DateTimePicker value="2026-09-15T14:30" onChange={onChange} locale="en" />);
 
-    await user.click(screen.getByRole("button", { name: /September 15, 2026/i }));
+    await user.click(screen.getByRole("button", { name: /Sep 15, 2026, 14:30/i }));
     const day15 = await screen.findByRole("button", { name: /September 15th/i });
     await user.click(day15);
     expect(onChange).toHaveBeenCalledWith("");
@@ -156,7 +166,7 @@ describe("DateTimePicker", () => {
         min="2026-09-10"
       />,
     );
-    await user.click(screen.getByRole("button", { name: /September 2, 2026/i }));
+    await user.click(screen.getByRole("button", { name: /Sep 2, 2026, 09:00/i }));
     const day5 = await screen.findByRole("button", { name: /September 5th/i });
     const day12 = screen.getByRole("button", { name: /September 12/i });
     expect(day5).toBeDisabled();
@@ -173,12 +183,82 @@ describe("DateTimePicker", () => {
         min="2026-09-10T18:00"
       />,
     );
-    await user.click(screen.getByRole("button", { name: /September 2, 2026/i }));
+    await user.click(screen.getByRole("button", { name: /Sep 2, 2026, 09:00/i }));
     const day9 = await screen.findByRole("button", { name: /September 9th/i });
     expect(day9).toBeDisabled();
   });
 
-  it("keeps the combined date+time in the accessible description when an external <Label htmlFor> supplies the accessible name", () => {
+  it("disables days after max and leaves earlier days enabled", async () => {
+    const user = userEvent.setup();
+    render(
+      <DateTimePicker
+        value="2026-09-02T09:00"
+        onChange={vi.fn()}
+        locale="en"
+        max="2026-09-20"
+      />,
+    );
+    await user.click(screen.getByRole("button", { name: /Sep 2, 2026, 09:00/i }));
+    const day25 = await screen.findByRole("button", { name: /September 25/i });
+    const day12 = screen.getByRole("button", { name: /September 12/i });
+    expect(day25).toBeDisabled();
+    expect(day12).not.toBeDisabled();
+  });
+
+  it("also honours a full datetime max by constraining on its date part", async () => {
+    const user = userEvent.setup();
+    render(
+      <DateTimePicker
+        value="2026-09-02T09:00"
+        onChange={vi.fn()}
+        locale="en"
+        max="2026-09-10T06:00"
+      />,
+    );
+    await user.click(screen.getByRole("button", { name: /Sep 2, 2026, 09:00/i }));
+    const day11 = await screen.findByRole("button", { name: /September 11th/i });
+    expect(day11).toBeDisabled();
+  });
+
+  it("leaves time-of-day unconstrained on the min day itself — min only bounds the calendar day", async () => {
+    // `min` truncates to its date part (see `isoDatePart`): the min *day* is
+    // pickable, and once picked its TimeField is not further restricted to
+    // times at-or-after `min`'s own time-of-day (there is no such concept —
+    // `min`/`max` never carry a time constraint, only a day one).
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(
+      <ControlledDateTimePicker
+        onChange={onChange}
+        locale="en"
+        min="2026-09-10T18:00"
+        placeholder="Select date and time"
+      />,
+    );
+    await user.click(screen.getByRole("button", { name: "Select date and time" }));
+    const minDay = await screen.findByRole("button", { name: /September 10th/i });
+    expect(minDay).not.toBeDisabled();
+    await user.click(minDay);
+    expect(onChange).toHaveBeenLastCalledWith("2026-09-10T00:00");
+
+    await user.selectOptions(screen.getByRole("combobox", { name: "Hours" }), "00");
+    await user.selectOptions(screen.getByRole("combobox", { name: "Minutes" }), "05");
+    expect(onChange).toHaveBeenLastCalledWith("2026-09-10T00:05");
+  });
+
+  it("re-selecting the unset -- option in a TimeField select while a date is set re-defaults to 00:00 rather than clearing", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<ControlledDateTimePicker initialValue="2026-09-15T14:30" onChange={onChange} locale="en" />);
+
+    await user.selectOptions(screen.getByRole("combobox", { name: "Hours" }), "");
+    // Not `onChange` called with `""` — the date stays, only the time part
+    // resets, same as if the date had just been picked with no time set yet.
+    expect(onChange).toHaveBeenLastCalledWith("2026-09-15T00:00");
+    expect(onChange).not.toHaveBeenCalledWith("");
+  });
+
+  it("keeps the combined date+time in the trigger's single accessible description when an external <Label htmlFor> supplies the accessible name", () => {
     render(
       <>
         <Label htmlFor="deadline">Deadline</Label>
@@ -186,7 +266,11 @@ describe("DateTimePicker", () => {
       </>,
     );
     const trigger = screen.getByRole("button", { name: "Deadline" });
-    expect(getAccessibleDescription(trigger)).toContain(
+    // Exactly one description id — `DatePicker`'s own `${id}-value` span,
+    // now carrying the combined label via its `label` prop. There is no
+    // second, `DateTimePicker`-owned span/id to double it up.
+    expect(trigger.getAttribute("aria-describedby")).toBe("deadline-value");
+    expect(getAccessibleDescription(trigger)).toBe(
       new Intl.DateTimeFormat("en-US", {
         dateStyle: "medium",
         timeStyle: "short",
@@ -195,7 +279,7 @@ describe("DateTimePicker", () => {
     );
   });
 
-  it("merges a consumer-provided aria-describedby with both of the trigger's own value-description ids", () => {
+  it("merges a consumer-provided aria-describedby with the trigger's own single value-description id", () => {
     render(
       <>
         <span id="hint">Used for escrow release</span>
@@ -208,10 +292,40 @@ describe("DateTimePicker", () => {
         />
       </>,
     );
-    const trigger = screen.getByRole("button", { name: /September 10, 2026/i });
-    expect(trigger.getAttribute("aria-describedby")).toBe(
-      "deadline-value deadline-datetime-value hint",
+    const trigger = screen.getByRole("button", { name: /Sep 10, 2026, 14:30/i });
+    expect(trigger.getAttribute("aria-describedby")).toBe("deadline-value hint");
+  });
+
+  it("forwards aria-invalid, name and aria-label to the date trigger", () => {
+    render(
+      <DateTimePicker
+        id="deadline"
+        name="deadline"
+        value=""
+        onChange={vi.fn()}
+        locale="en"
+        aria-invalid
+        aria-label="Deadline"
+      />,
     );
+    const trigger = screen.getByRole("button", { name: "Deadline" });
+    expect(trigger).toHaveAttribute("aria-invalid", "true");
+    expect(trigger).toHaveAttribute("name", "deadline");
+  });
+
+  it("defaults TimeField aria-labels from locale (ru), independent of any English default", () => {
+    render(<DateTimePicker value="" onChange={vi.fn()} locale="ru" />);
+    expect(screen.getByRole("combobox", { name: "Часы" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: "Минуты" })).toBeInTheDocument();
+  });
+
+  it("forwards minuteStep to TimeField", () => {
+    render(<DateTimePicker value="" onChange={vi.fn()} locale="en" minuteStep={15} />);
+    const minutesSelect = screen.getByRole("combobox", { name: "Minutes" });
+    const optionValues = Array.from(minutesSelect.querySelectorAll("option")).map((option) =>
+      option.getAttribute("value"),
+    );
+    expect(optionValues).toEqual(["", "00", "15", "30", "45"]);
   });
 });
 

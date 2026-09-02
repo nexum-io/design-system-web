@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { cn } from "./utils";
 import { DatePicker, type DatePickerLocale } from "./date-picker";
-import { TimeField } from "./time-field";
+import { TimeField, type TimeFieldLabels } from "./time-field";
 import { parseIsoDateTime, formatIsoDateTime } from "./iso-date";
 
 export type DateTimePickerLocale = DatePickerLocale;
@@ -14,12 +14,23 @@ const INTL_LOCALE_TAGS: Record<DateTimePickerLocale, string> = {
   ru: "ru-RU",
 };
 
+/**
+ * `TimeField`'s two `<select>`s have no visible text of their own, so their
+ * aria-labels need to track `locale` the same way the calendar does —
+ * unlike `TimeField`'s own English-only defaults (used when it's consumed
+ * standalone), `DateTimePicker` knows its `locale` and defaults from it.
+ */
+const DEFAULT_TIME_LABELS: Record<DateTimePickerLocale, Required<TimeFieldLabels>> = {
+  en: { hours: "Hours", minutes: "Minutes" },
+  ru: { hours: "Часы", minutes: "Минуты" },
+};
+
 export interface DateTimePickerProps {
   /** ISO local date-time `YYYY-MM-DDTHH:mm` (the `datetime-local` contract), or empty string / undefined. */
   value?: string;
   /** Called with `YYYY-MM-DDTHH:mm` once a date is picked, or `""` when the date is cleared. */
   onChange: (value: string) => void;
-  /** UI language of the calendar and of the combined value description. Default `"en"`. Independent of the browser locale. */
+  /** UI language of the calendar and of the combined value label. Default `"en"`. Independent of the browser locale. */
   locale?: DateTimePickerLocale;
   /** Trigger text when no value (forwarded to the date part). */
   placeholder?: string;
@@ -27,14 +38,27 @@ export interface DateTimePickerProps {
    * Inclusive bounds. Accepts either an ISO date (`YYYY-MM-DD`) or a full
    * date-time (`YYYY-MM-DDTHH:mm`) — only the date portion is enforced (the
    * calendar disables days outside range); time-of-day within the boundary
-   * day is never restricted.
+   * day (including the min/max day itself) is never restricted.
    */
   min?: string;
   max?: string;
   disabled?: boolean;
+  /** Forwarded to the date trigger button (pairs with `<Label htmlFor>`); the `TimeField` gets `${id}-time`. */
   id?: string;
+  name?: string;
+  /** Lands on the wrapping `<div className="flex ...">` around the date trigger and `TimeField`, not on the trigger itself — use `contentProps`/DS class conventions for the popover or trigger surface. */
   className?: string;
+  /** Extra props for the calendar's popover content (e.g. `align`); forwarded to `DatePicker`. */
+  contentProps?: React.ComponentProps<typeof DatePicker>["contentProps"];
+  /** aria-label for the date trigger. Forwarded to `DatePicker`. */
+  "aria-label"?: string;
+  /** Forwarded to `DatePicker`'s trigger `<Button>`, already styled for `aria-invalid:*`. */
+  "aria-invalid"?: boolean;
   "aria-describedby"?: string;
+  /** Overrides the `TimeField` aria-labels; defaults from `locale` (see `DEFAULT_TIME_LABELS`) rather than `TimeField`'s own English-only default. */
+  timeLabels?: TimeFieldLabels;
+  /** Minute option interval passed through to `TimeField`, e.g. `5` renders `00, 05, ... 55`. Default `1`. */
+  minuteStep?: number;
 }
 
 /** Splits `YYYY-MM-DDTHH:mm` into its date and time parts; `""` for both when `value` is empty. */
@@ -56,10 +80,18 @@ function isoDatePart(value?: string): string | undefined {
  * `<input type="datetime-local">`.
  *
  * Value semantics: the date drives the value. Picking a date defaults an
- * unset time to `00:00` (never drops the time silently); clearing the date
- * clears the whole value, including any time that was set. There is no way
- * to hold a time with no date — `TimeField` changes are ignored until a
- * date exists.
+ * unset time to `00:00` (never drops the time silently); re-selecting the
+ * unset `--` option in either `TimeField` select while a date is already
+ * set *also* re-defaults to `00:00` rather than clearing anything — the
+ * value contract has no "date with no time" state. Clearing the date is the
+ * only way to clear the whole value (including any time that was set).
+ * There is no way to hold a time with no date — `TimeField` changes are
+ * ignored until a date exists.
+ *
+ * The trigger shows and announces the combined date+time (via `DatePicker`'s
+ * `label` prop), formatted with `Intl.DateTimeFormat(locale, { dateStyle:
+ * "medium", timeStyle: "short", hour12: false })` — `DatePicker` itself
+ * still owns the single sr-only description span this produces.
  */
 function DateTimePicker({
   value,
@@ -70,13 +102,15 @@ function DateTimePicker({
   max,
   disabled,
   id,
+  name,
   className,
+  contentProps,
+  timeLabels,
+  minuteStep,
+  "aria-label": ariaLabel,
+  "aria-invalid": ariaInvalid,
   "aria-describedby": ariaDescribedBy,
 }: DateTimePickerProps) {
-  const generatedId = React.useId();
-  const baseId = id ?? generatedId;
-  const valueDescriptionId = `${baseId}-datetime-value`;
-
   const { date: datePart, time: timePart } = splitIsoDateTime(value);
 
   function handleDateChange(newDate: string) {
@@ -91,23 +125,28 @@ function DateTimePicker({
     // No date yet: there is nothing to combine the time with, and the value
     // contract has no "time-only" representation.
     if (!datePart) return;
+    // `newTime` is `""` when the user reset a `TimeField` select back to its
+    // unset `--` option — defaulting to `00:00` here (same as an initial
+    // date pick) rather than calling `onChange("")` keeps that contract:
+    // a set date always carries *some* time.
     onChange(`${datePart}T${newTime || "00:00"}`);
   }
 
   const intlTag = INTL_LOCALE_TAGS[locale];
   const parsed = parseIsoDateTime(value);
-  const formattedValue = parsed
+  const combinedLabel = parsed
     ? new Intl.DateTimeFormat(intlTag, {
         dateStyle: "medium",
         timeStyle: "short",
         hour12: false,
       }).format(parsed)
-    : placeholder;
+    : undefined;
 
   return (
     <div className={cn("flex items-start gap-2", className)} data-slot="date-time-picker">
       <DatePicker
-        id={baseId}
+        id={id}
+        name={name}
         locale={locale}
         value={datePart}
         onChange={handleDateChange}
@@ -116,24 +155,19 @@ function DateTimePicker({
         placeholder={placeholder}
         disabled={disabled}
         className="flex-1"
-        aria-describedby={[valueDescriptionId, ariaDescribedBy].filter(Boolean).join(" ") || undefined}
+        label={combinedLabel}
+        contentProps={contentProps}
+        aria-label={ariaLabel}
+        aria-invalid={ariaInvalid}
+        aria-describedby={ariaDescribedBy}
       />
-      {/*
-        Mirrors the DatePicker convention: the composed value (date *and*
-        time) is exposed as an accessible description so a consumer's
-        `<Label htmlFor={id}>` (which supplies the accessible name) doesn't
-        silence it — a native `<input type="datetime-local">` announces both.
-      */}
-      {formattedValue ? (
-        <span id={valueDescriptionId} className="sr-only">
-          {formattedValue}
-        </span>
-      ) : null}
       <TimeField
-        id={`${baseId}-time`}
+        id={id ? `${id}-time` : undefined}
         value={timePart}
         onChange={handleTimeChange}
+        minuteStep={minuteStep}
         disabled={disabled}
+        labels={timeLabels ?? DEFAULT_TIME_LABELS[locale]}
         className="shrink-0"
       />
     </div>

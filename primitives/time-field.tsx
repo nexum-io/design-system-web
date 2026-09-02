@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 
 import { cn } from "./utils";
@@ -59,8 +61,21 @@ function TimeField({
     for (let minute = 0; minute < 60; minute += step) {
       options.push(String(minute).padStart(2, "0"));
     }
+    // The current value may not land on the step grid (e.g. value "07" with
+    // minuteStep=5, or minuteStep changed after a value was already set) —
+    // insert it in sorted position so the select never silently renders
+    // blank for a value it otherwise has no option for.
+    if (minutesPart && !options.includes(minutesPart)) {
+      const minuteNumber = Number(minutesPart);
+      const insertAt = options.findIndex((option) => Number(option) > minuteNumber);
+      if (insertAt === -1) {
+        options.push(minutesPart);
+      } else {
+        options.splice(insertAt, 0, minutesPart);
+      }
+    }
     return options;
-  }, [minuteStep]);
+  }, [minuteStep, minutesPart]);
 
   function handleHoursChange(newHours: string) {
     if (!newHours) {
