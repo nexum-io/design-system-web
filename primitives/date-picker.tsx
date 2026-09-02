@@ -7,6 +7,7 @@ import { enUS, ru } from "react-day-picker/locale";
 import { cn } from "./utils";
 import { Button } from "./button";
 import { Calendar } from "./calendar";
+import { parseIsoDate, formatIsoDate } from "./iso-date";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
 export type DatePickerLocale = "en" | "ru";
@@ -20,44 +21,6 @@ const INTL_LOCALE_TAGS: Record<DatePickerLocale, string> = {
   en: "en-US",
   ru: "ru-RU",
 };
-
-const ISO_DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
-
-/**
- * Parses an ISO calendar date (`YYYY-MM-DD`) into a local-time `Date`.
- *
- * Deliberately avoids `new Date("YYYY-MM-DD")`, which the spec parses as UTC
- * midnight — in timezones behind UTC that shifts the displayed calendar day
- * back by one. Returns `undefined` for empty, malformed, or out-of-range
- * input (e.g. `"2026-02-30"`).
- */
-function parseIsoDate(value?: string): Date | undefined {
-  if (!value) return undefined;
-  const match = ISO_DATE_PATTERN.exec(value);
-  if (!match) return undefined;
-
-  const year = Number(match[1]);
-  const month = Number(match[2]);
-  const day = Number(match[3]);
-  const date = new Date(year, month - 1, day);
-
-  // Guards against e.g. "2026-02-30": the Date constructor rolls invalid
-  // day-of-month values into the next month instead of rejecting them.
-  const isValid =
-    date.getFullYear() === year &&
-    date.getMonth() === month - 1 &&
-    date.getDate() === day;
-
-  return isValid ? date : undefined;
-}
-
-/** Formats a local `Date` back to a zero-padded `YYYY-MM-DD` string. */
-function formatIsoDate(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
 
 export interface DatePickerProps {
   /** ISO calendar date `YYYY-MM-DD` or empty string / undefined. */
@@ -80,6 +43,14 @@ export interface DatePickerProps {
   contentProps?: React.ComponentProps<typeof PopoverContent>;
   "aria-label"?: string;
   "aria-invalid"?: boolean;
+  /**
+   * Merged (space-separated) with the trigger's own description id, which
+   * points at a visually-hidden span holding the picked date. Without this,
+   * a consumer labelling the trigger with `<Label htmlFor={id}>` gets an
+   * accessible name but no accessible description of the value — a native
+   * `<input type="date">` announces both, this restores parity.
+   */
+  "aria-describedby"?: string;
 }
 
 function DatePicker({
@@ -96,8 +67,12 @@ function DatePicker({
   contentProps,
   "aria-label": ariaLabel,
   "aria-invalid": ariaInvalid,
+  "aria-describedby": ariaDescribedBy,
 }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
+  const generatedId = React.useId();
+  const triggerId = id ?? generatedId;
+  const valueDescriptionId = `${triggerId}-value`;
 
   // Radix keeps rendering the popover if `disabled` flips true mid-open —
   // force it closed so a disabled trigger can never leave a stale calendar
@@ -140,6 +115,7 @@ function DatePicker({
           aria-expanded={open}
           aria-label={ariaLabel}
           aria-invalid={ariaInvalid}
+          aria-describedby={[valueDescriptionId, ariaDescribedBy].filter(Boolean).join(" ")}
           className={cn(
             "w-full justify-start text-left font-normal",
             !date && "text-muted-foreground",
@@ -150,6 +126,17 @@ function DatePicker({
           {label}
         </Button>
       </PopoverTrigger>
+      {/*
+        Screen readers resolve the trigger's accessible name from any
+        `<Label htmlFor>` a consumer attaches (label-from-content loses to an
+        explicit external label) — so the picked date, otherwise the only
+        text inside the button, would never be announced. Exposing it as the
+        trigger's accessible description restores that, matching what native
+        `<input type="date">` announces.
+      */}
+      <span id={valueDescriptionId} className="sr-only">
+        {label}
+      </span>
       <PopoverContent
         {...contentProps}
         className={cn("w-auto p-0", contentProps?.className)}
