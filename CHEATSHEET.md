@@ -296,6 +296,8 @@ Arbitrary values still work when no named utility exists:
 | Primitive | Import | Notes |
 |-----------|--------|-------|
 | `DatePicker` | `@nexum-io/design-system/primitives/date-picker` | Locale-controlled calendar (`locale: "en" \| "ru"`, default `"en"`), independent of the browser/OS language. ISO `YYYY-MM-DD` value contract, optional `min`/`max` bounds. Use instead of `<input type="date">`, which localizes by browser language. |
+| `DateTimePicker` | `@nexum-io/design-system/primitives/date-time-picker` | `DatePicker` + `TimeField` side by side. ISO `YYYY-MM-DDTHH:mm` value contract (`min`/`max` accept a date or date-time, but only the date part is enforced). Picking a date defaults an unset time to `00:00`; clearing the date clears the whole value. Use instead of `<input type="datetime-local">`. |
+| `TimeField` | `@nexum-io/design-system/primitives/time-field` | Two plain `<select>`s (hours `00-23`, minutes `00-59`, `minuteStep` prop). `value`/`onChange` contract `HH:mm \| ""`. Not Radix `Select` — a native select carries no locale risk for zero-padded numbers, unlike `<input type="time">`. |
 
 ## 💡 Pro Tips
 
