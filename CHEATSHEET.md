@@ -292,6 +292,11 @@ Arbitrary values still work when no named utility exists:
 | danger | Errors, destructive actions |
 | info | Informational messages |
 
+### Primitives
+| Primitive | Import | Notes |
+|-----------|--------|-------|
+| `DatePicker` | `@nexum-io/design-system/primitives/date-picker` | Locale-controlled calendar (`locale: "en" \| "ru"`, default `"en"`), independent of the browser/OS language. ISO `YYYY-MM-DD` value contract, optional `min`/`max` bounds. Use instead of `<input type="date">`, which localizes by browser language. |
+
 ## 💡 Pro Tips
 
 1. **Always use semantic tokens** for colors (not raw color values)
