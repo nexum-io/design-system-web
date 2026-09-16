@@ -55,8 +55,9 @@ describe('CabinetSidebar', () => {
   });
 
   it('renders orgSlot inside data-slot=cabinet-org when provided', () => {
-    render(<CabinetSidebar {...defaultProps} orgSlot={<div>Org</div>} />);
+    render(<CabinetSidebar {...defaultProps} orgSlot={<div>Org</div>} orgLabel="Organization" />);
 
+    expect(screen.getByText('Organization')).toBeInTheDocument();
     expect(screen.getByText('Org').closest('[data-slot="cabinet-org"]')).not.toBeNull();
   });
 
@@ -66,8 +67,8 @@ describe('CabinetSidebar', () => {
         {...defaultProps}
         sections={[
           {
-            id: 'products',
-            label: 'Additional products',
+            id: 'services',
+            label: 'Services',
             items: [
               {
                 id: 'escrow',

@@ -70,6 +70,8 @@ export interface CabinetLabels {
   themeToDark: string;
   language: string;
   closeSheet: string;
+  /** Section label above the org switcher slot. */
+  organization?: string;
 }
 
 export interface SettingsSection {

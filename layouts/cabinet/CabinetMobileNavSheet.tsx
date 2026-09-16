@@ -16,6 +16,7 @@ export interface CabinetMobileNavSheetProps {
   linkComponent: CabinetLinkComponent;
   isActive: (href: string) => boolean;
   orgSlot?: ReactNode;
+  orgLabel?: string;
   closeLabel: string;
 }
 
@@ -32,6 +33,7 @@ export function CabinetMobileNavSheet({
   linkComponent: Link,
   isActive,
   orgSlot,
+  orgLabel,
   closeLabel,
 }: CabinetMobileNavSheetProps) {
   function getLinkClassName(active: boolean): string {
@@ -63,7 +65,15 @@ export function CabinetMobileNavSheet({
         </div>
 
         {orgSlot != null ? (
-          <div data-slot="cabinet-org" className="shrink-0 border-b border-sidebar-border p-3">
+          <div
+            data-slot="cabinet-org"
+            className="shrink-0 border-b border-sidebar-border bg-bg-muted/40 p-3"
+          >
+            {orgLabel ? (
+              <div className="mb-1 px-1 text-xs font-medium uppercase tracking-wide text-sidebar-foreground/60">
+                {orgLabel}
+              </div>
+            ) : null}
             {orgSlot}
           </div>
         ) : null}

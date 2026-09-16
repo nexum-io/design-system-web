@@ -76,6 +76,7 @@ export function CabinetShell({
         linkComponent={linkComponent}
         isActive={isActive}
         orgSlot={orgSlot}
+        orgLabel={labels.organization}
         footerSlot={sidebarFooterSlot}
       />
       <div className="flex min-w-0 flex-1 flex-col">
@@ -111,6 +112,7 @@ export function CabinetShell({
         linkComponent={linkComponent}
         isActive={isActive}
         orgSlot={orgSlot}
+        orgLabel={labels.organization}
         closeLabel={labels.closeSheet}
       />
     </div>
