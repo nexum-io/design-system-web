@@ -17,6 +17,8 @@ export interface CabinetSidebarProps {
   linkComponent: CabinetLinkComponent;
   isActive: (href: string) => boolean;
   orgSlot?: ReactNode;
+  /** Label rendered above orgSlot when expanded (e.g. "Organization"). */
+  orgLabel?: string;
   /** Extra footer above collapse control (e.g. ResetDemo) */
   footerSlot?: ReactNode;
   className?: string;
@@ -34,6 +36,7 @@ export function CabinetSidebar({
   linkComponent: Link,
   isActive,
   orgSlot,
+  orgLabel,
   footerSlot,
   className,
 }: CabinetSidebarProps) {
@@ -66,7 +69,15 @@ export function CabinetSidebar({
       </div>
 
       {orgSlot != null ? (
-        <div data-slot="cabinet-org" className="shrink-0 px-2 pb-2">
+        <div
+          data-slot="cabinet-org"
+          className="shrink-0 border-b border-sidebar-border bg-bg-muted/40 px-2 py-2"
+        >
+          {!collapsed && orgLabel ? (
+            <div className="mb-1 px-2 text-xs font-medium uppercase tracking-wide text-sidebar-foreground/60">
+              {orgLabel}
+            </div>
+          ) : null}
           {orgSlot}
         </div>
       ) : null}
