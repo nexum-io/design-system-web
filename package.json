@@ -3,23 +3,6 @@
   "version": "0.2.1",
   "description": "Nexum shared design system — tokens, shadcn/Radix primitives, and components for Tailwind v4 + React 19.",
   "type": "module",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nexum-io/design-system-web.git"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "public"
-  },
-  "sideEffects": [
-    "**/*.css"
-  ],
-  "files": [
-    "dist",
-    "README.md",
-    "CHANGELOG.md"
-  ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -67,6 +50,31 @@
     },
     "./package.json": "./package.json"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nexum-io/design-system-web.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nexum-io/design-system-web/issues"
+  },
+  "homepage": "https://github.com/nexum-io/design-system-web#readme",
+  "author": "nexum-io",
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
+  },
   "scripts": {
     "prepare": "npm run build",
     "build": "npm run sync:design-system && tsup && node scripts/copy-styles.mjs",
@@ -75,6 +83,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "tsc --noEmit",
     "test": "vitest run",
+    "ci:check": "npm run typecheck && npm test",
     "test:watch": "vitest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
@@ -134,8 +143,5 @@
     "typescript": "^5.5.3",
     "vite": "^6.0.0",
     "vitest": "^3.2.0"
-  },
-  "engines": {
-    "node": ">=20"
   }
 }
