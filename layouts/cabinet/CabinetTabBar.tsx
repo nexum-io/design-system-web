@@ -28,11 +28,13 @@ export function CabinetTabBar({
       className="fixed inset-x-0 bottom-0 z-(--ds-z-sticky) flex min-h-(--ds-cabinet-tab-bar-height) border-t border-border bg-background pb-[env(safe-area-inset-bottom,0px)] md:hidden"
     >
       {items.map((item) => {
-        const active = isActive(item.href);
+        const href = item.href?.trim() ?? '';
+        if (!href) return null;
+        const active = isActive(href);
         return (
           <Link
             key={item.id}
-            to={item.href}
+            to={href}
             aria-current={active ? 'page' : undefined}
             className={cx(
               itemClassName,
