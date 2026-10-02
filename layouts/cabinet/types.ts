@@ -9,7 +9,11 @@ export const CABINET_LOCALE_KEY = 'nexum.cabinet.locale';
 export interface CabinetNavItem {
   id: string;
   label: string;
-  href: string;
+  /**
+   * Target path for SPA navigation. Omit for non-navigating items
+   * (e.g. "Coming soon") — sidebar/sheet render a disabled row.
+   */
+  href?: string;
   icon?: ReactNode;
   external?: boolean;
   /** Optional trailing badge (count, status). Omitted = no badge. */

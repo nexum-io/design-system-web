@@ -88,7 +88,8 @@ export function CabinetMobileNavSheet({
               ) : null}
               <div className="space-y-1">
                 {section.items.map((item) => {
-                  const active = !item.external && isActive(item.href);
+                  const href = item.href?.trim() ?? '';
+                  const active = Boolean(href) && !item.external && isActive(href);
                   const content = (
                     <>
                       {item.icon ? <span className="shrink-0 [&>svg]:size-4">{item.icon}</span> : null}
@@ -100,11 +101,22 @@ export function CabinetMobileNavSheet({
                       ) : null}
                     </>
                   );
+                  if (!href) {
+                    return (
+                      <span
+                        key={item.id}
+                        aria-disabled="true"
+                        className={cx(getLinkClassName(false), 'cursor-default opacity-60')}
+                      >
+                        {content}
+                      </span>
+                    );
+                  }
                   if (item.external) {
                     return (
                       <a
                         key={item.id}
-                        href={item.href}
+                        href={href}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={closeSheet}
@@ -117,7 +129,7 @@ export function CabinetMobileNavSheet({
                   return (
                     <Link
                       key={item.id}
-                      to={item.href}
+                      to={href}
                       onClick={closeSheet}
                       aria-current={active ? 'page' : undefined}
                       className={getLinkClassName(active)}

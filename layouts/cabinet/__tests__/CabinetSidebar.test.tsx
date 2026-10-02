@@ -142,4 +142,22 @@ describe('CabinetSidebar', () => {
     const { container } = render(<CabinetSidebar {...defaultProps} />);
     expect(container.querySelector('[data-slot="cabinet-nav-badge"]')).toBeNull();
   });
+
+  it('renders items without href as non-navigating disabled rows', () => {
+    render(
+      <CabinetSidebar
+        {...defaultProps}
+        sections={[
+          {
+            id: 'core',
+            label: 'Core',
+            items: [{ id: 'soon', label: 'Coming soon' }],
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.queryByRole('link', { name: 'Coming soon' })).toBeNull();
+    expect(screen.getByText('Coming soon').closest('[aria-disabled="true"]')).not.toBeNull();
+  });
 });
