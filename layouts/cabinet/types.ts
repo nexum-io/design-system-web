@@ -47,6 +47,8 @@ export interface CabinetAuthMenuItem {
   id: string;
   label: string;
   onSelect: () => void;
+  /** Optional leading icon (Lucide node). */
+  icon?: ReactNode;
 }
 
 export interface CabinetAuthSignedIn {
