@@ -9,3 +9,5 @@ storybook-static
 # Agent scratch (Superpowers / SDD) — never commit
 .superpowers/
 .ai-sdd/
+.worktrees/
+.ai-task/
