@@ -120,6 +120,11 @@ export function CabinetTopbar({
                   {auth.supportLabel}
                 </DropdownMenuItem>
               ) : null}
+              {auth.menuItems?.map((item) => (
+                <DropdownMenuItem key={item.id} onSelect={item.onSelect}>
+                  {item.label}
+                </DropdownMenuItem>
+              ))}
               <DropdownMenuItem onSelect={auth.onSignOut}>
                 <LogOut aria-hidden />
                 {auth.signOutLabel}

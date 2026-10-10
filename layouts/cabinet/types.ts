@@ -43,12 +43,23 @@ export interface CabinetAuthSignedOut {
   onSignIn: () => void;
 }
 
+export interface CabinetAuthMenuItem {
+  id: string;
+  label: string;
+  onSelect: () => void;
+}
+
 export interface CabinetAuthSignedIn {
   status: 'signed_in';
   label: string;
   subtitle?: string;
   signOutLabel: string;
   onSignOut: () => void;
+  /**
+   * Optional extra menu items (e.g. local-only tools) — rendered after Support
+   * and before Sign out when provided.
+   */
+  menuItems?: CabinetAuthMenuItem[];
   /** Optional Support menu item — rendered before Sign out only when both are set. */
   supportLabel?: string;
   onSupport?: () => void;

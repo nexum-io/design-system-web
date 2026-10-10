@@ -113,4 +113,30 @@ describe('CabinetTopbar', () => {
     expect(screen.getAllByRole('menuitem')).toHaveLength(1);
     expect(screen.queryByRole('menuitem', { name: 'Support' })).not.toBeInTheDocument();
   });
+
+  it('renders optional menuItems after Support and before Sign out', async () => {
+    const onEcho = vi.fn();
+    const onSupport = vi.fn();
+    render(
+      <CabinetTopbar
+        {...defaultProps}
+        auth={{
+          status: 'signed_in',
+          label: 'Alex',
+          signOutLabel: 'Sign Out',
+          onSignOut: vi.fn(),
+          supportLabel: 'Support',
+          onSupport,
+          menuItems: [{ id: 'echo-sign', label: 'Echo sign', onSelect: onEcho }],
+        }}
+      />,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Alex' }));
+    const items = screen.getAllByRole('menuitem');
+    expect(items.map((item) => item.textContent)).toEqual(['Support', 'Echo sign', 'Sign Out']);
+
+    await userEvent.click(screen.getByRole('menuitem', { name: 'Echo sign' }));
+    expect(onEcho).toHaveBeenCalledOnce();
+  });
 });
