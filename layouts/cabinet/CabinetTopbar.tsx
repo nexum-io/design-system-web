@@ -5,8 +5,8 @@ import { Button } from '../../primitives/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../../primitives/dropdown-menu';
@@ -44,6 +44,10 @@ export function CabinetTopbar({
   labels,
   showLocaleSwitch = true,
 }: CabinetTopbarProps) {
+  const hasSupport = Boolean(auth.status === 'signed_in' && auth.supportLabel && auth.onSupport);
+  const menuItems = auth.status === 'signed_in' ? (auth.menuItems ?? []) : [];
+  const hasMiddleActions = hasSupport || menuItems.length > 0;
+
   return (
     <header
       data-slot="cabinet-topbar"
@@ -100,32 +104,65 @@ export function CabinetTopbar({
         ) : (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button type="button" variant="outline" aria-label={auth.label}>
+              <Button
+                type="button"
+                variant="outline"
+                className="gap-1.5 cursor-pointer"
+                aria-label={auth.label}
+              >
                 <span className="max-w-32 truncate">{auth.label}</span>
-                <ChevronDown className="size-4" aria-hidden />
+                <ChevronDown className="size-4 opacity-70" aria-hidden />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {auth.subtitle ? (
-                <>
-                  <DropdownMenuLabel className="max-w-64 truncate font-normal text-muted-foreground">
+            <DropdownMenuContent
+              align="end"
+              sideOffset={8}
+              className="min-w-56 rounded-xl border-border p-1.5 shadow-lg"
+            >
+              <div className="px-2.5 py-2" role="presentation">
+                <p className="truncate text-sm font-semibold leading-tight text-foreground">
+                  {auth.label}
+                </p>
+                {auth.subtitle ? (
+                  <p className="mt-1 truncate font-mono text-xs text-muted-foreground">
                     {auth.subtitle}
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
+                  </p>
+                ) : null}
+              </div>
+
+              {hasMiddleActions ? (
+                <>
+                  <DropdownMenuSeparator className="my-1" />
+                  <DropdownMenuGroup>
+                    {hasSupport ? (
+                      <DropdownMenuItem
+                        className="cursor-pointer gap-2.5 rounded-lg px-2.5 py-2"
+                        onSelect={auth.onSupport}
+                      >
+                        <LifeBuoy aria-hidden />
+                        {auth.supportLabel}
+                      </DropdownMenuItem>
+                    ) : null}
+                    {menuItems.map((item) => (
+                      <DropdownMenuItem
+                        key={item.id}
+                        className="cursor-pointer gap-2.5 rounded-lg px-2.5 py-2"
+                        onSelect={item.onSelect}
+                      >
+                        {item.icon ?? null}
+                        {item.label}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuGroup>
                 </>
               ) : null}
-              {auth.supportLabel && auth.onSupport ? (
-                <DropdownMenuItem onSelect={auth.onSupport}>
-                  <LifeBuoy aria-hidden />
-                  {auth.supportLabel}
-                </DropdownMenuItem>
-              ) : null}
-              {auth.menuItems?.map((item) => (
-                <DropdownMenuItem key={item.id} onSelect={item.onSelect}>
-                  {item.label}
-                </DropdownMenuItem>
-              ))}
-              <DropdownMenuItem onSelect={auth.onSignOut}>
+
+              <DropdownMenuSeparator className="my-1" />
+              <DropdownMenuItem
+                variant="destructive"
+                className="cursor-pointer gap-2.5 rounded-lg px-2.5 py-2"
+                onSelect={auth.onSignOut}
+              >
                 <LogOut aria-hidden />
                 {auth.signOutLabel}
               </DropdownMenuItem>

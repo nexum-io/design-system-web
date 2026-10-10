@@ -62,6 +62,8 @@ describe('CabinetTopbar', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Alex' }));
     expect(screen.getByText('alex@example.com')).toBeInTheDocument();
+    // Account identity appears in the menu header (not as a menuitem).
+    expect(screen.getAllByText('Alex').length).toBeGreaterThanOrEqual(1);
     await userEvent.click(screen.getByRole('menuitem', { name: 'Sign Out' }));
     expect(onSignOut).toHaveBeenCalledOnce();
   });
