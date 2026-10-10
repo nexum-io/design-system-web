@@ -1,5 +1,6 @@
 export type {
   CabinetAuth,
+  CabinetAuthMenuItem,
   CabinetAuthSignedIn,
   CabinetAuthSignedOut,
   CabinetBrand,
