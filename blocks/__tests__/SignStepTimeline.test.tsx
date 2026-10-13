@@ -67,6 +67,26 @@ describe("SignStepTimeline", () => {
     expect(screen.queryByText("Should not show")).toBeNull();
   });
 
+  it("shows children on completed steps when provided (done success body)", () => {
+    render(
+      <SignStepTimeline
+        ariaLabel="Sign in steps"
+        steps={[
+          { id: "wallet", label: "Wallet", status: "completed" },
+          { id: "sign", label: "Signature", status: "completed" },
+          {
+            id: "done",
+            label: "Done",
+            status: "completed",
+            children: <p>You are in</p>,
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText("You are in")).toBeInTheDocument();
+  });
+
   it("renders trailing action beside completed wallet text", () => {
     render(
       <SignStepTimeline
