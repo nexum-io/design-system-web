@@ -36,9 +36,7 @@ const TS_OUT = join(DS_DIR, 'tokens.ts');
 
 const CHECK = process.argv.includes('--check');
 
-// ---------------------------------------------------------------------------
 // Load + merge token sets in the order declared by $metadata.json.
-// ---------------------------------------------------------------------------
 const meta = JSON.parse(readFileSync(join(TOKENS_DIR, '$metadata.json'), 'utf8'));
 const sets = {};
 for (const name of meta.tokenSetOrder) {
@@ -48,9 +46,6 @@ const core = sets.core;
 const semantic = sets.semantic.semantic; // { light, dark }
 const typography = sets.typography.type;
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 const kebab = (s) => String(s).replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 
 /** Read a literal `.value` from the core tree by dot-path array. */
@@ -111,9 +106,7 @@ function resolveCss(value) {
 /** Resolve a value to a `var()`/literal string for the TS runtime map. */
 const resolveTs = (value) => resolveCss(value);
 
-// ---------------------------------------------------------------------------
 // Emit: tokens.css
-// ---------------------------------------------------------------------------
 function emitPrimitiveBlock(label, group, mapName) {
   const lines = [`  /* ${label} */`];
   for (const [key, token] of Object.entries(group)) {
@@ -209,9 +202,7 @@ function buildCss() {
   return out.join('\n');
 }
 
-// ---------------------------------------------------------------------------
 // Emit: tokens.ts
-// ---------------------------------------------------------------------------
 const isBareKey = (k) => /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(k) || /^[0-9]+$/.test(k);
 const tsKey = (k) => (isBareKey(k) ? k : `'${k}'`);
 
@@ -325,7 +316,6 @@ export function getToken(path: string): string {
   return typeof value === 'string' ? value : '';
 }
 
-// Convert a camelCase style object to kebab-case CSS keys.
 export function css(styles: Record<string, string | number>) {
   return Object.entries(styles).reduce(
     (acc, [key, value]) => {
@@ -338,9 +328,7 @@ export function css(styles: Record<string, string | number>) {
 `;
 }
 
-// ---------------------------------------------------------------------------
 // Run
-// ---------------------------------------------------------------------------
 const cssContent = buildCss();
 const tsContent = buildTs();
 

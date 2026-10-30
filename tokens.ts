@@ -407,7 +407,6 @@ export function getToken(path: string): string {
   return typeof value === 'string' ? value : '';
 }
 
-// Convert a camelCase style object to kebab-case CSS keys.
 export function css(styles: Record<string, string | number>) {
   return Object.entries(styles).reduce(
     (acc, [key, value]) => {
