@@ -65,3 +65,9 @@ export {
   type DummyAccountListLabels,
   type DummyAccount,
 } from './DummyAccountList';
+export {
+  NexumIdQrPanel,
+  type NexumIdQrPanelProps,
+  type NexumIdQrPanelLabels,
+  type NexumIdQrPhase,
+} from './NexumIdQrPanel';
