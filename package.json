@@ -89,7 +89,7 @@
     "build-storybook": "storybook build",
     "prepublishOnly": "npm run build && npm run check",
     "changeset": "changeset",
-    "version-packages": "changeset version",
+    "version-packages": "changeset version && npm install --package-lock-only",
     "release": "npm run build && changeset publish",
     "install:skills": "node scripts/install-skills.mjs"
   },
