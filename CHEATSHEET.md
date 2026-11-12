@@ -299,6 +299,18 @@ Arbitrary values still work when no named utility exists:
 | `DateTimePicker` | `@nexum-io/design-system/primitives/date-time-picker` | `DatePicker` + `TimeField` side by side. ISO `YYYY-MM-DDTHH:mm` value contract (`min`/`max` accept a date or date-time, but only the date part is enforced). Picking a date defaults an unset time to `00:00`; clearing the date clears the whole value. Use instead of `<input type="datetime-local">`. |
 | `TimeField` | `@nexum-io/design-system/primitives/time-field` | Two plain `<select>`s (hours `00-23`, minutes `00-59`, `minuteStep` prop). `value`/`onChange` contract `HH:mm \| ""`. Not Radix `Select` — a native select carries no locale risk for zero-padded numbers, unlike `<input type="time">`. |
 
+### Auth blocks
+Presentation-only blocks for the unified auth `SigningSheet` (`intent="auth"`). No API calls, no i18n: every string comes in via `labels`.
+
+| Block | Import | Notes |
+|-------|--------|-------|
+| `AuthMethodPicker` | `@nexum-io/design-system/blocks` | First step: Nexum ID (recommended) and WalletConnect rows. Props `onNexumId`, `onWalletConnect`, `labels`. |
+| `WalletConnectOptions` | `@nexum-io/design-system/blocks` | "All wallets" / "Connect via QR" rows; `connecting` disables both and shows a spinner. |
+| `DummyAccountList` | `@nexum-io/design-system/blocks` | Test-wallet cards with `Identicon`; `labels.title(n)` / `labels.reference(label)`, optional `formatAddress`. |
+| `NexumIdQrPanel` | `@nexum-io/design-system/blocks` | `phase` `creating \| waiting \| completing`, `qrPayload`, `expiresAt` (invalid/expired date falls back to the `rotates` copy), `error` + `onRestart`, `onUseWallet`. Polling lives in the host app. |
+| `AuthChoiceRow` | `@nexum-io/design-system/blocks` | Building row behind the picker and wallet options. |
+| `QrCode` / `Identicon` | `@nexum-io/design-system/components` | `QrCode` keeps modules near-black on a white pad (never `text-foreground`). `Identicon` is seeded by address. |
+
 ## 💡 Pro Tips
 
 1. **Always use semantic tokens** for colors (not raw color values)
