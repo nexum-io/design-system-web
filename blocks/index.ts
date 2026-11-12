@@ -51,3 +51,17 @@ export type {
   SigningConfirmReasonField,
   SigningConfirmInput,
 } from './SigningConfirmDialog';
+
+export { AuthChoiceRow, type AuthChoiceRowProps } from './AuthChoiceRow';
+export { AuthMethodPicker, type AuthMethodPickerProps, type AuthMethodPickerLabels } from './AuthMethodPicker';
+export {
+  WalletConnectOptions,
+  type WalletConnectOptionsProps,
+  type WalletConnectOptionsLabels,
+} from './WalletConnectOptions';
+export {
+  DummyAccountList,
+  type DummyAccountListProps,
+  type DummyAccountListLabels,
+  type DummyAccount,
+} from './DummyAccountList';
