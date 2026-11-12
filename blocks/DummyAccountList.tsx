@@ -23,6 +23,7 @@ export interface DummyAccountListProps {
   formatAddress?: (address: string) => string;
 }
 
+/** Same as the cabinets' `formatShortAddress(address, 8, 6)`. */
 function defaultFormatAddress(address: string): string {
   if (address.length <= 17) return address;
   return `${address.slice(0, 8)}...${address.slice(-6)}`;
