@@ -81,6 +81,7 @@ describe("DateTimePicker", () => {
   );
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
     if (originalNavigatorLanguage) {
       Object.defineProperty(window.navigator, "language", originalNavigatorLanguage);
@@ -117,7 +118,10 @@ describe("DateTimePicker", () => {
   });
 
   it("picking a day then setting a time composes onto the same ISO value, defaulting the time to 00:00 first", async () => {
-    const user = userEvent.setup();
+    // An empty value opens the calendar on the current month; pin the clock so "September 15" exists.
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    vi.setSystemTime(new Date(2026, 8, 2));
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     const onChange = vi.fn();
     render(<ControlledDateTimePicker onChange={onChange} locale="en" placeholder="Select date and time" />);
 
