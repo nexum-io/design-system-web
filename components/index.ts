@@ -43,3 +43,7 @@ export type { SpinnerProps } from './Spinner';
 
 export { FormField, IconInput } from './FormField';
 export type { FormFieldProps, IconInputProps } from './FormField';
+
+export { QrCode } from './QrCode';
+
+export { Identicon } from './Identicon';
