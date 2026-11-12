@@ -41,8 +41,27 @@ describe("DummyAccountList", () => {
     expect(screen.getByText("<22>")).toBeInTheDocument();
   });
 
+  it("keeps addresses of 17 characters or fewer unchanged", () => {
+    const short = [
+      { id: "s1", address: "0x123456789abcdef", label: "exact" },
+      { id: "s2", address: "0xabc", label: "tiny" },
+      { id: "s3", address: "0x123456789abcdef0", label: "over" },
+    ];
+    render(<DummyAccountList accounts={short} connecting={false} onSelect={vi.fn()} labels={labels} />);
+    expect(screen.getByText("0x123456789abcdef")).toBeInTheDocument();
+    expect(screen.getByText("0xabc")).toBeInTheDocument();
+    expect(screen.getByText("0x123456...bcdef0")).toBeInTheDocument();
+  });
+
   it("disables buttons while connecting", () => {
     render(<DummyAccountList accounts={accounts} connecting onSelect={vi.fn()} labels={labels} />);
     screen.getAllByRole("button").forEach((b) => expect(b).toBeDisabled());
+  });
+
+  it("ignores clicks on a disabled row", () => {
+    const onSelect = vi.fn();
+    render(<DummyAccountList accounts={accounts} connecting onSelect={onSelect} labels={labels} />);
+    fireEvent.click(screen.getByRole("button", { name: /Account 1/ }));
+    expect(onSelect).not.toHaveBeenCalled();
   });
 });

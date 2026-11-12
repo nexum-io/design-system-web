@@ -72,6 +72,103 @@ describe('NexumIdQrPanel', () => {
     expect(screen.getByText('Expires in 7s')).toBeTruthy();
   });
 
+  it('resyncs the countdown when waiting starts after creating', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-01-01T00:00:00Z'));
+    const props = {
+      qrPayload: PAYLOAD,
+      expiresAt: '2026-01-01T00:00:10Z',
+      error: null,
+      onRestart: vi.fn(),
+      onUseWallet: vi.fn(),
+      labels,
+    };
+    const { rerender } = render(<NexumIdQrPanel phase="creating" {...props} />);
+    vi.setSystemTime(new Date('2026-01-01T00:00:02.500Z'));
+    rerender(<NexumIdQrPanel phase="waiting" {...props} />);
+    expect(screen.getByText('Expires in 8s')).toBeTruthy();
+  });
+
+  it('shows the completing status with a spinner and a frozen countdown', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-01-01T00:00:00Z'));
+    const { container } = render(
+      <NexumIdQrPanel
+        phase="completing"
+        qrPayload={PAYLOAD}
+        expiresAt="2026-01-01T00:00:10Z"
+        error={null}
+        onRestart={vi.fn()}
+        onUseWallet={vi.fn()}
+        labels={labels}
+      />,
+    );
+    expect(screen.getByText(labels.completing)).toBeTruthy();
+    expect(screen.queryByText(labels.waiting)).toBeNull();
+    expect(container.querySelector('.animate-spin')).not.toBeNull();
+    act(() => {
+      vi.advanceTimersByTime(3000);
+    });
+    expect(screen.getByText('Expires in 10s')).toBeTruthy();
+  });
+
+  it('clears the copied timer on unmount', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal('navigator', { ...navigator, clipboard: { writeText } });
+    const { unmount } = render(
+      <NexumIdQrPanel
+        phase="waiting"
+        qrPayload={PAYLOAD}
+        expiresAt={null}
+        error={null}
+        onRestart={vi.fn()}
+        onUseWallet={vi.fn()}
+        labels={labels}
+      />,
+    );
+    vi.useFakeTimers();
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: labels.copyCode }));
+    });
+    expect(screen.getByRole('button', { name: labels.copied })).toBeTruthy();
+    expect(vi.getTimerCount()).toBe(1);
+    unmount();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('ignores a clipboard write that resolves after unmount', async () => {
+    let resolveWrite: () => void = () => {};
+    const writeText = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveWrite = resolve;
+        }),
+    );
+    vi.stubGlobal('navigator', { ...navigator, clipboard: { writeText } });
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const { unmount } = render(
+      <NexumIdQrPanel
+        phase="waiting"
+        qrPayload={PAYLOAD}
+        expiresAt={null}
+        error={null}
+        onRestart={vi.fn()}
+        onUseWallet={vi.fn()}
+        labels={labels}
+      />,
+    );
+    vi.useFakeTimers();
+    fireEvent.click(screen.getByRole('button', { name: labels.copyCode }));
+    unmount();
+    await act(async () => {
+      resolveWrite();
+    });
+    expect(writeText).toHaveBeenCalledTimes(1);
+    expect(vi.getTimerCount()).toBe(0);
+    expect(consoleError).not.toHaveBeenCalled();
+    consoleError.mockRestore();
+  });
+
   it('shows the rotates copy for an unparsable date', () => {
     renderPanel({ expiresAt: 'not-a-date' });
     expect(screen.getByText(labels.rotates)).toBeTruthy();

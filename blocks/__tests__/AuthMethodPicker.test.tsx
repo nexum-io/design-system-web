@@ -35,4 +35,14 @@ describe("AuthMethodPicker", () => {
     render(<AuthMethodPicker disabled onNexumId={vi.fn()} onWalletConnect={vi.fn()} labels={labels} />);
     screen.getAllByRole("button").forEach((b) => expect(b).toBeDisabled());
   });
+
+  it("ignores clicks on disabled rows", () => {
+    const onNexumId = vi.fn();
+    const onWalletConnect = vi.fn();
+    render(<AuthMethodPicker disabled onNexumId={onNexumId} onWalletConnect={onWalletConnect} labels={labels} />);
+    fireEvent.click(screen.getByRole("button", { name: /Nexum ID/ }));
+    fireEvent.click(screen.getByRole("button", { name: /WalletConnect/ }));
+    expect(onNexumId).not.toHaveBeenCalled();
+    expect(onWalletConnect).not.toHaveBeenCalled();
+  });
 });

@@ -57,18 +57,26 @@ export function NexumIdQrPanel({
   const [copied, setCopied] = useState(false);
   const resetTimer = useRef<number | null>(null);
 
+  const mounted = useRef(false);
+
   useEffect(() => {
     if (!expiresAt || phase !== 'waiting') return;
+    // nowMs may be stale from an earlier phase; resync before the first tick.
+    setNowMs(Date.now());
     const timer = window.setInterval(() => setNowMs(Date.now()), 1_000);
     return () => window.clearInterval(timer);
   }, [expiresAt, phase]);
 
-  useEffect(
-    () => () => {
-      if (resetTimer.current !== null) window.clearTimeout(resetTimer.current);
-    },
-    [],
-  );
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      if (resetTimer.current !== null) {
+        window.clearTimeout(resetTimer.current);
+        resetTimer.current = null;
+      }
+    };
+  }, []);
 
   const copy = async (text: string) => {
     try {
@@ -76,6 +84,8 @@ export function NexumIdQrPanel({
     } catch {
       return;
     }
+    // The clipboard may resolve after unmount: no state update, no timer.
+    if (!mounted.current) return;
     setCopied(true);
     if (resetTimer.current !== null) window.clearTimeout(resetTimer.current);
     resetTimer.current = window.setTimeout(() => {
