@@ -21,6 +21,9 @@ export interface FileDropzoneLabels {
   constraints?: string;
   /** Accessible label for the per-file remove button. */
   remove?: string;
+  rejectedType?: string;
+  rejectedSize?: string;
+  rejectedCount?: string;
 }
 
 export type FileRejectReason = { type: "count" | "size" | "type"; file?: File };
@@ -82,6 +85,11 @@ export function FileDropzone({
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [isDragging, setDragging] = React.useState(false);
   const [previews, setPreviews] = React.useState<Record<string, string>>({});
+  const [rejections, setRejections] = React.useState<FileRejectReason[]>([]);
+
+  React.useEffect(() => {
+    if (value.length === 0) setRejections((current) => (current.length === 0 ? current : []));
+  }, [value.length]);
 
   // Keep object URLs in sync with the controlled value (create missing, revoke removed).
   React.useEffect(() => {
@@ -112,31 +120,47 @@ export function FileDropzone({
   const addFiles = (incoming: FileList | File[]) => {
     if (disabled) return;
     const accepted: File[] = [];
+    const rejected: FileRejectReason[] = [];
+    const reject = (reason: FileRejectReason) => {
+      rejected.push(reason);
+      onReject?.(reason);
+    };
     for (const file of Array.from(incoming)) {
       if (!matchesAccept(file, accept)) {
-        onReject?.({ type: "type", file });
+        reject({ type: "type", file });
         continue;
       }
       if (file.size > maxSizeMb * 1024 * 1024) {
-        onReject?.({ type: "size", file });
+        reject({ type: "size", file });
         continue;
       }
       const key = fileKey(file);
       const seen = value.some((f) => fileKey(f) === key) || accepted.some((f) => fileKey(f) === key);
       if (!seen) accepted.push(file);
     }
-    if (accepted.length === 0) return;
+    if (accepted.length === 0) {
+      setRejections(rejected);
+      return;
+    }
     let nextFiles = [...value, ...accepted];
     if (nextFiles.length > maxFiles) {
-      onReject?.({ type: "count" });
+      reject({ type: "count" });
       nextFiles = nextFiles.slice(0, maxFiles);
     }
+    setRejections(rejected);
     onChange(nextFiles);
   };
 
   const removeAt = (index: number) => {
     if (disabled) return;
+    setRejections([]);
     onChange(value.filter((_, i) => i !== index));
+  };
+
+  const rejectionText = (reason: FileRejectReason): string => {
+    if (reason.type === "type") return labels?.rejectedType ?? "file type is not supported";
+    if (reason.type === "size") return labels?.rejectedSize ?? `larger than ${maxSizeMb} MB`;
+    return labels?.rejectedCount ?? `You can add up to ${maxFiles} ${maxFiles === 1 ? "file" : "files"}`;
   };
 
   return (
@@ -201,6 +225,16 @@ export function FileDropzone({
           }}
         />
       </div>
+
+      {rejections.length > 0 && (
+        <div role="alert" className="flex flex-col gap-1 break-words text-xs text-destructive">
+          {rejections.map((reason, index) => (
+            <p key={index}>
+              {reason.file ? `${reason.file.name} — ${rejectionText(reason)}` : rejectionText(reason)}
+            </p>
+          ))}
+        </div>
+      )}
 
       {value.length > 0 && (
         <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3">

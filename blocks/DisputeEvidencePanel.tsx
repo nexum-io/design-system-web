@@ -90,6 +90,7 @@ export function DisputeEvidencePanel({
 }: DisputeEvidencePanelProps) {
   const [text, setText] = React.useState("");
   const [files, setFiles] = React.useState<File[]>([]);
+  const [draftId, setDraftId] = React.useState(0);
   const [localError, setLocalError] = React.useState<string | null>(null);
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -103,6 +104,7 @@ export function DisputeEvidencePanel({
     void Promise.resolve(onSubmit({ text: text.trim(), files })).then(() => {
       setText("");
       setFiles([]);
+      setDraftId((id) => id + 1);
     });
   };
 
@@ -161,6 +163,7 @@ export function DisputeEvidencePanel({
           <div className="flex flex-col gap-2">
             <Label>{labels.attachmentsLabel}</Label>
             <FileDropzone
+              key={draftId}
               value={files}
               onChange={setFiles}
               accept={accept}
